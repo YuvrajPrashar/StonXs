@@ -22,4 +22,8 @@ public class Stock {
     private String sector;
     private String stockSymbol;
     private String currentPrice;
+    private boolean isDeleted=false;
+
+    public Stock(String stockName, String sector, String stockSymbol, String currentPrice) {
+    }
 }

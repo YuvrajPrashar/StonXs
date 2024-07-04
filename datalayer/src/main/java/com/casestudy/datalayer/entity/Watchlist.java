@@ -11,19 +11,16 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Transactions {
+public class Watchlist {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long transactionId;
+    private Long watchlistId;
     @ManyToOne
     @JoinColumn(name = "userId")
     private User user;
     @ManyToOne
     @JoinColumn(name = "stockId")
     private Stock stock;
-    private String transactionType;
-    private Long quantity;
-    private String transactionDate;
-    private float price;
     private boolean isDeleted=false;
+
 }

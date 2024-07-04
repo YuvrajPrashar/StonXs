@@ -6,24 +6,23 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Transactions {
+public class Portfolio {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long transactionId;
-    @ManyToOne
+    private Long portfolioId;
+    @OneToOne
     @JoinColumn(name = "userId")
     private User user;
     @ManyToOne
     @JoinColumn(name = "stockId")
     private Stock stock;
-    private String transactionType;
-    private Long quantity;
-    private String transactionDate;
-    private float price;
     private boolean isDeleted=false;
 }

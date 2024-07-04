@@ -21,4 +21,8 @@ public class User {
     private String username;
     private String password;
     private String email;
+    private boolean isDeleted = false;
+
+    public User(String username, String password, String email) {
+    }
 }
