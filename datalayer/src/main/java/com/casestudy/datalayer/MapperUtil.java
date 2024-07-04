@@ -22,6 +22,12 @@ public class MapperUtil {
     public UserDTO mapUserToUserDto(User user){
         return new UserDTO(user.getUsername(), user.getPassword(), user.getEmail());
     }
+    public List<User> mapUserDTOListToUserList(List<UserDTO> userDTOList){
+        return userDTOList.stream().map(this::mapUserDtoToUser).toList();
+    }
+    public List<UserDTO> mapUserListToUserDTOList(List<User> userList){
+        return userList.stream().map(this::mapUserToUserDto).toList();
+    }
     public Stock mapStockDtoToStock(StockDTO stockDTO){
         return new Stock(stockDTO.getStockName(), stockDTO.getSector(), stockDTO.getStockSymbol(), stockDTO.getCurrentPrice());
     }

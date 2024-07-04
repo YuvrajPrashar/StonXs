@@ -33,9 +33,9 @@ public class UserService {
             throw e;
         }
     }
-    public List<User> getAllUsers(){
+    public List<UserDTO> getAllUsers(){
         try {
-            return userRepo.findAll();
+            return mapperUtil.mapUserListToUserDTOList(userRepo.findAll());
         } catch (Exception e) {
             throw e;
         }
