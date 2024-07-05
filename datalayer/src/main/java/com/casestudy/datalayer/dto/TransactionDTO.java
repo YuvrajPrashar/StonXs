@@ -15,7 +15,7 @@ public class TransactionDTO {
 
     @JsonProperty("quantity")
     private Long quantity;
-    @JsonProperty("transactionType")
+    @JsonProperty("transactiontype")
     private String transactionType;
     @JsonProperty("price")
     private float price;
