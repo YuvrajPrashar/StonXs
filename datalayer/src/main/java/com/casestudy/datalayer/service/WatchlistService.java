@@ -68,6 +68,9 @@ public class WatchlistService {
                 return "Stock not found";
             }
             Watchlist watchlist = user.getWatchlist();
+            if (watchlist.getStock().contains(stock)) {
+                return "Stock already exists in watchlist";
+            }
             watchlist.getStock().add(stock);
             watchListRepo.save(watchlist);
             return "Stock added to watchlist successfully";
@@ -75,17 +78,19 @@ public class WatchlistService {
             throw new RuntimeException(e);
         }
     }
-    public  String deleteStockFromWatchlist(UUID stockId, UUID userId){
+    public  String deleteStockFromWatchlist(UUID watchlistid , UUID stockId){
         try {
-            User user = userRepo.findById(userId).orElse(null);
-            if (user == null) {
-                return "User not found";
+            Watchlist watchlist = watchListRepo.findById(watchlistid).orElse(null);
+            if (watchlist == null) {
+                return "watchlist not found";
             }
             Stock stock = stocksRepo.findById(stockId).orElse(null);
             if (stock == null) {
                 return "Stock not found";
             }
-            Watchlist watchlist = user.getWatchlist();
+            if (!watchlist.getStock().contains(stock)) {
+                return "Stock does not exist in watchlist";
+            }
             watchlist.getStock().remove(stock);
             watchListRepo.save(watchlist);
             return "Stock removed from watchlist successfully";

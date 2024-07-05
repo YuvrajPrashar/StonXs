@@ -22,8 +22,8 @@ public class WatchlistController {
         }
     }
 
-    @PatchMapping("/watchlist/{id}/stock/{stockId}")
-    public String removeStockFromWatchlist(@PathVariable("id") UUID id, @PathVariable("stockId") UUID stockId) {
+    @PatchMapping("/watchlist/{watchlistid}/stock/{stockId}")
+    public String removeStockFromWatchlist(@PathVariable("watchlistid") UUID id, @PathVariable("stockId") UUID stockId) {
         try {
             return watchlistService.deleteStockFromWatchlist(id, stockId);
         } catch (Exception e) {
