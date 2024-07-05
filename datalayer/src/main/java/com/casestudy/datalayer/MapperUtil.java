@@ -1,21 +1,29 @@
 package com.casestudy.datalayer;
 
+import com.casestudy.datalayer.dto.PortfolioDTO;
 import com.casestudy.datalayer.dto.StockDTO;
 import com.casestudy.datalayer.dto.UserDTO;
+import com.casestudy.datalayer.dto.WatchlistDTO;
+import com.casestudy.datalayer.entity.Portfolio;
 import com.casestudy.datalayer.entity.Stock;
 import com.casestudy.datalayer.entity.User;
+import com.casestudy.datalayer.entity.Watchlist;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Comment;
+import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 
+@Component
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class MapperUtil {
+
     public User mapUserDtoToUser(UserDTO userDTO){
         return new User(userDTO.getUsername(), userDTO.getPassword(), userDTO.getEmail());
     }
@@ -39,5 +47,29 @@ public class MapperUtil {
     }
     public List<StockDTO> mapStockListToStockDTOList(List<Stock> stockList){
         return stockList.stream().map(this::mapStockToStockDto).toList();
+    }
+    public PortfolioDTO mapPortfolioToPortfolioDTO(Portfolio portfolio){
+        return new PortfolioDTO(portfolio.getProfit(), portfolio.getLoss(), portfolio.getTotalvalue(), mapStockListToStockDTOList(portfolio.getStock().isEmpty() ? Collections.emptyList() : portfolio.getStock()), portfolio.getBalance());
+    }
+    public Portfolio mapPortfolioDtoToPortfolio(PortfolioDTO portfolioDTO){
+        return new Portfolio( portfolioDTO.getBalance() , portfolioDTO.getTotalvalue(), portfolioDTO.getProfit(), portfolioDTO.getLoss(), mapStockDTOListToStockList(portfolioDTO.getStocks()));
+    }
+    public List<PortfolioDTO> mapPortfolioListToPortfolioDTOList(List<Portfolio> portfolioList){
+        return portfolioList.stream().map(this::mapPortfolioToPortfolioDTO).toList();
+    }
+    public List<Portfolio> mapPortfolioDTOListToPortfolioList(List<PortfolioDTO> portfolioDTOList){
+        return portfolioDTOList.stream().map(this::mapPortfolioDtoToPortfolio).toList();
+    }
+    public WatchlistDTO mapWatchlistToWatchlistDTO(Watchlist watchlist){
+        return new WatchlistDTO(mapStockListToStockDTOList(watchlist.getStock().isEmpty() ? Collections.emptyList() : watchlist.getStock()));
+    }
+    public Watchlist mapWatchlistDtoToWatchlist(WatchlistDTO watchlistDTO){
+        return new Watchlist(mapStockDTOListToStockList(watchlistDTO.getStocks()));
+    }
+    public List<WatchlistDTO> mapWatchlistListToWatchlistDTOList(List<Watchlist> watchlistList){
+        return watchlistList.stream().map(this::mapWatchlistToWatchlistDTO).toList();
+    }
+    public List<Watchlist> mapWatchlistDTOListToWatchlistList(List<WatchlistDTO> watchlistDTOList){
+        return watchlistDTOList.stream().map(this::mapWatchlistDtoToWatchlist).toList();
     }
 }

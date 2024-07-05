@@ -1,4 +1,25 @@
 package com.casestudy.datalayer.controller;
 
+import com.casestudy.datalayer.dto.TransactionDTO;
+import com.casestudy.datalayer.service.TransactionService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
+
+@RestController
 public class TransactionController {
+    @Autowired
+    private TransactionService transactionService;
+
+    @PostMapping("/user/{userid}/stock/{stockid}")
+    public String getTransactionByUserIdAndStockId(@PathVariable("userid") UUID userid, @PathVariable("stockid") UUID stockid, @RequestBody TransactionDTO transactionDTO) {
+        return transactionService.getTransactionByUserIdAndStockId(userid, stockid, transactionDTO);
+    }
+
+    @PatchMapping("/transaction/{id}")
+    public String deleteTransaction(@PathVariable("id") UUID id) {
+        return transactionService.deleteTransaction(id);
+    }
+
 }

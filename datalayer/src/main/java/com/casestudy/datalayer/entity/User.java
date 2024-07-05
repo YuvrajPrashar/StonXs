@@ -1,13 +1,12 @@
 package com.casestudy.datalayer.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -16,13 +15,22 @@ import lombok.Setter;
 @NoArgsConstructor
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID userId;
     private String username;
     private String password;
+    @Column(unique = true)
     private String email;
     private boolean isDeleted = false;
+    @OneToOne(mappedBy = "user")
+    private Portfolio portfolio;
+    @OneToOne(mappedBy = "user")
+    private Watchlist watchlist;
+
 
     public User(String username, String password, String email) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
     }
 }

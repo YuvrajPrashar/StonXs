@@ -1,34 +1,57 @@
 package com.casestudy.datalayer.service;
 
 import com.casestudy.datalayer.MapperUtil;
+import com.casestudy.datalayer.dto.PortfolioDTO;
+import com.casestudy.datalayer.entity.Portfolio;
 import com.casestudy.datalayer.entity.User;
+import com.casestudy.datalayer.entity.Watchlist;
+import com.casestudy.datalayer.repositary.PortfolioRepo;
 import com.casestudy.datalayer.repositary.UserRepo;
+import com.casestudy.datalayer.repositary.WatchListRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.casestudy.datalayer.dto.UserDTO;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class UserService {
     @Autowired
     UserRepo userRepo;
     @Autowired
+    PortfolioRepo portfolioRepo;
+    @Autowired
+    WatchListRepo watchListRepo;
+    @Autowired
     MapperUtil mapperUtil;
 
     public String createUser(UserDTO userDTO){
         User user = mapperUtil.mapUserDtoToUser(userDTO);
         try {
+            Portfolio portfolio = new Portfolio();
             userRepo.save(user);
+            portfolio.setUser(user);
+            portfolioRepo.save(portfolio);
+            user.setPortfolio(portfolio);
+            Watchlist watchlist = new Watchlist();
+            watchlist.setUser(user);
+            watchListRepo.save(watchlist);
+            user.setWatchlist(watchlist);
+
             return "User created successfully";
         } catch (Exception e) {
             return "User creation failed " + e.getMessage();
         }
     }
 
-    public User getUser(Long id){
+    public UserDTO getUser( UUID id){
         try {
-            return userRepo.findById(id).orElse(null);
+            User user = userRepo.findById(id).orElse(null);
+            if(user == null){
+                return null;
+            }
+            return mapperUtil.mapUserToUserDto(user);
         } catch (Exception e) {
             throw e;
         }
@@ -40,12 +63,18 @@ public class UserService {
             throw e;
         }
     }
-    public String deleteUser(Long id){
+    public String deleteUser(UUID id){
         try {
             User user = userRepo.findById(id).orElse(null);
             if(user == null){
                 return "User not found";
             }
+            Portfolio portfolio = user.getPortfolio();
+            Watchlist watchlist = user.getWatchlist();
+            portfolio.setDeleted(true);
+            portfolioRepo.save(portfolio);
+            watchlist.setDeleted(true);
+            watchListRepo.save(watchlist);
             user.setDeleted(true);
             return "User deleted successfully";
         } catch (Exception e) {

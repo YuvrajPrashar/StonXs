@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Service
 public class StockService {
@@ -21,14 +22,14 @@ public class StockService {
         stocksRepo.save(mapperUtil.mapStockDtoToStock(stock));
         return "Stock created successfully";
     }
-    public StockDTO getStock(Long id){
+    public StockDTO getStock(UUID id){
         Stock stock = stocksRepo.findById(id).orElse(null);
         if(Objects.isNull(stock)){
             return null;
         }
         return mapperUtil.mapStockToStockDto(stock);
     }
-    public String deleteStock(Long id){
+    public String deleteStock(UUID id){
         Stock stock = stocksRepo.findById(id).orElse(null);
         if(stock == null){
             return "Stock not found";

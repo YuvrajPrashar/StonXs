@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 public class UserController {
@@ -17,7 +18,7 @@ public class UserController {
         return UserService.createUser(userDTO);
     }
     @DeleteMapping("/deleteUser")
-    public String deleteUser(@RequestBody Long id){
+    public String deleteUser(@RequestBody UUID id){
         return UserService.deleteUser(id);
     }
     @PatchMapping("/updateUser")
@@ -25,7 +26,7 @@ public class UserController {
         return UserService.updateUser(userDTO);
     }
     @GetMapping("/getUser{id}")
-    public User getUser(@PathVariable("id") Long id){
+    public UserDTO getUser(@PathVariable("id") UUID id){
         return UserService.getUser(id);
     }
     @GetMapping("/getAllUsers")
