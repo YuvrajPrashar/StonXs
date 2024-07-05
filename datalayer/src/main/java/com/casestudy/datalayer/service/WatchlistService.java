@@ -22,21 +22,33 @@ public class WatchlistService {
     private MapperUtil mapperUtil;
 
     public WatchlistDTO getWatchlistByUserId(UUID id) {
-        User user = userRepo.findById(id).orElse(null);
-        if (user == null) {
-            return null;
+        try {
+            User user = userRepo.findById(id).orElse(null);
+            if (user == null) {
+                return null;
+            }
+            Watchlist watchlist = user.getWatchlist();
+            return mapperUtil.mapWatchlistToWatchlistDTO(watchlist);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-        Watchlist watchlist = user.getWatchlist();
-        return mapperUtil.mapWatchlistToWatchlistDTO(watchlist);
     }
     public WatchlistDTO getWatchlist(UUID id) {
-        Watchlist watchlist = watchListRepo.findById(id).orElse(null);
-        if (watchlist == null) {
-            return null;
+        try {
+            Watchlist watchlist = watchListRepo.findById(id).orElse(null);
+            if (watchlist == null) {
+                return null;
+            }
+            return mapperUtil.mapWatchlistToWatchlistDTO(watchlist);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-        return mapperUtil.mapWatchlistToWatchlistDTO(watchlist);
     }
     public List<WatchlistDTO> getAllWatchlists() {
-        return mapperUtil.mapWatchlistListToWatchlistDTOList(watchListRepo.findAll());
+        try {
+            return mapperUtil.mapWatchlistListToWatchlistDTOList(watchListRepo.findAll());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

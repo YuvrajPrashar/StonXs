@@ -15,16 +15,28 @@ public class WatchlistController {
     @Autowired
     private WatchlistService watchlistService;
 
-    @GetMapping("/watchlist/{id}")
-    public WatchlistDTO getWatchlist(@PathVariable("id") UUID id) {
-        return watchlistService.getWatchlist(id);
-    }
     @GetMapping("/user/{id}/watchlist")
     public WatchlistDTO getWatchlistByUserId(@PathVariable("id") UUID id) {
-        return watchlistService.getWatchlistByUserId(id);
+        try {
+            return watchlistService.getWatchlistByUserId(id);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
     @GetMapping("/watchlist")
     public List<WatchlistDTO> getAllWatchlists() {
-        return watchlistService.getAllWatchlists();
+        try {
+            return watchlistService.getAllWatchlists();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    @GetMapping("/watchlist/{id}")
+    public WatchlistDTO getWatchlist(@PathVariable("id") UUID id) {
+        try {
+            return watchlistService.getWatchlist(id);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

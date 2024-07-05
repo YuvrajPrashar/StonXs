@@ -15,22 +15,42 @@ public class UserController {
 
     @PostMapping("/createUser")
     public String createUser(@RequestBody UserDTO userDTO){
-        return UserService.createUser(userDTO);
-    }
-    @DeleteMapping("/deleteUser")
-    public String deleteUser(@RequestBody UUID id){
-        return UserService.deleteUser(id);
-    }
-    @PatchMapping("/updateUser")
-    public String updateUser(@RequestBody UserDTO userDTO){
-        return UserService.updateUser(userDTO);
+        try {
+            return UserService.createUser(userDTO);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
     @GetMapping("/getUser{id}")
     public UserDTO getUser(@PathVariable("id") UUID id){
-        return UserService.getUser(id);
+        try {
+            return UserService.getUser(id);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
     @GetMapping("/getAllUsers")
     public List<UserDTO> getAllUsers(){
-        return UserService.getAllUsers();
+        try {
+            return UserService.getAllUsers();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    @PatchMapping("/updateUser")
+    public String updateUser(@RequestBody UserDTO userDTO){
+        try {
+            return UserService.updateUser(userDTO);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    @DeleteMapping("/deleteUser")
+    public String deleteUser(@RequestBody UUID id){
+        try {
+            return UserService.deleteUser(id);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

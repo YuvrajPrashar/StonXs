@@ -22,23 +22,35 @@ public class PortfolioService {
     private MapperUtil mapperUtil;
 
     public PortfolioDTO getPortfolioByUserId(UUID id) {
-        User user = userRepo.findById(id).orElse(null);
-        if (user == null) {
-            return null;
+        try {
+            User user = userRepo.findById(id).orElse(null);
+            if (user == null) {
+                return null;
+            }
+            Portfolio portfolio= user.getPortfolio();
+            return mapperUtil.mapPortfolioToPortfolioDTO(portfolio);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-        Portfolio portfolio= user.getPortfolio();
-        return mapperUtil.mapPortfolioToPortfolioDTO(portfolio);
     }
     public PortfolioDTO getPortfolio(UUID id) {
-        Portfolio portfolio = portfolioRepo.findById(id).orElse(null);
-        if (portfolio == null) {
-            return null;
+        try {
+            Portfolio portfolio = portfolioRepo.findById(id).orElse(null);
+            if (portfolio == null) {
+                return null;
+            }
+            return mapperUtil.mapPortfolioToPortfolioDTO(portfolio);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-        return mapperUtil.mapPortfolioToPortfolioDTO(portfolio);
     }
 
     public List<PortfolioDTO> getAllPortfolios() {
-        return mapperUtil.mapPortfolioListToPortfolioDTOList(portfolioRepo.findAll());
+        try {
+            return mapperUtil.mapPortfolioListToPortfolioDTOList(portfolioRepo.findAll());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 

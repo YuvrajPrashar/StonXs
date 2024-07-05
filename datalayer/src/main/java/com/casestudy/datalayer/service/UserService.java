@@ -76,6 +76,7 @@ public class UserService {
             watchlist.setDeleted(true);
             watchListRepo.save(watchlist);
             user.setDeleted(true);
+            userRepo.save(user);
             return "User deleted successfully";
         } catch (Exception e) {
             return "User deletion failed " + e.getMessage();

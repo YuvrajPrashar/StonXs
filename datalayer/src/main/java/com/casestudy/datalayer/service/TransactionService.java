@@ -34,59 +34,67 @@ public class TransactionService {
 
     public String getTransactionByUserIdAndStockId(UUID userid, UUID stockid, TransactionDTO transactionDTO) {
 
-        User user = userRepo.findById(userid).orElse(null);
-        Stock stock = stockRepo.findById(stockid).orElse(null);
+        try {
+            User user = userRepo.findById(userid).orElse(null);
+            Stock stock = stockRepo.findById(stockid).orElse(null);
 
-        if (user == null || stock == null) {
-            return null;
-        }
-
-        Portfolio portfolio = user.getPortfolio();
-
-        long quantity = transactionDTO.getQuantity();
-        String transactiontype = transactionDTO.getTransactionType();
-        float price = transactionDTO.getPrice();
-
-        Transactions transaction = new Transactions();
-        transaction.setPortfolio(portfolio);
-        transaction.setStock(stock);
-        transaction.setQuantity(quantity);
-        transaction.setPrice(price);
-        transaction.setTransactionType(transactiontype);
-
-
-        if (transactiontype.equals("buy")) {
-            if (portfolio.getBalance() < quantity * price) {
-                return "Insufficient balance";
+            if (user == null || stock == null) {
+                return null;
             }
-            portfolio.getStock().add(stock);
-            portfolio.setBalance((int) (portfolio.getBalance() - quantity * price));
-            portfolio.setTotalvalue(portfolio.getTotalvalue() + (int) (quantity * price));
-            portfolioRepo.save(portfolio);
-            transactionRepo.save(transaction);
-            return "Transaction successful";
-        } else if (transactiontype.equals("sell")) {
-            portfolio.getStock().remove(stock);
-            portfolio.setBalance((int) (portfolio.getBalance() + quantity * price));
-            portfolio.setTotalvalue(portfolio.getTotalvalue() - (int) (quantity * price));
-            portfolioRepo.save(portfolio);
-            transactionRepo.save(transaction);
-            return "Transaction successful";
-        }
 
-        else {
-            return "Invalid transaction type";
+            Portfolio portfolio = user.getPortfolio();
+
+            long quantity = transactionDTO.getQuantity();
+            String transactiontype = transactionDTO.getTransactionType();
+            float price = transactionDTO.getPrice();
+
+            Transactions transaction = new Transactions();
+            transaction.setPortfolio(portfolio);
+            transaction.setStock(stock);
+            transaction.setQuantity(quantity);
+            transaction.setPrice(price);
+            transaction.setTransactionType(transactiontype);
+
+
+            if (transactiontype.equals("buy")) {
+                if (portfolio.getBalance() < quantity * price) {
+                    return "Insufficient balance";
+                }
+                portfolio.getStock().add(stock);
+                portfolio.setBalance((int) (portfolio.getBalance() - quantity * price));
+                portfolio.setTotalvalue(portfolio.getTotalvalue() + (int) (quantity * price));
+                portfolioRepo.save(portfolio);
+                transactionRepo.save(transaction);
+                return "Transaction successful";
+            } else if (transactiontype.equals("sell")) {
+                portfolio.getStock().remove(stock);
+                portfolio.setBalance((int) (portfolio.getBalance() + quantity * price));
+                portfolio.setTotalvalue(portfolio.getTotalvalue() - (int) (quantity * price));
+                portfolioRepo.save(portfolio);
+                transactionRepo.save(transaction);
+                return "Transaction successful";
+            }
+
+            else {
+                return "Invalid transaction type";
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
 
     }
 
     public String deleteTransaction(UUID id) {
-        Transactions transaction = transactionRepo.findById(id).orElse(null);
-        if (transaction == null) {
-            return "Transaction not found";
-        }
-          transaction.setDeleted(true);
+        try {
+            Transactions transaction = transactionRepo.findById(id).orElse(null);
+            if (transaction == null) {
+                return "Transaction not found";
+            }
+            transaction.setDeleted(true);
             transactionRepo.save(transaction);
             return "Transaction deleted successfully";
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

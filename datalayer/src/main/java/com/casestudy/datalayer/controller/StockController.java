@@ -14,25 +14,44 @@ public class StockController {
     StockService stockService;
 
     @PostMapping("/stock/{id}")
-    public String createStock(StockDTO stockDto){
-        return stockService.createStock(stockDto);
+    public String createStock(@RequestBody StockDTO stockDto){
+        try {
+            return stockService.createStock(stockDto);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    @DeleteMapping("/stock/{id}")
-    public String deleteStock(UUID id){
-        return stockService.deleteStock(id);
-    }
-    @PatchMapping("/stock/{id}")
-    public String updateStock(StockDTO stockDto){
-        return stockService.updateStock(stockDto);
-    }
     @GetMapping("/stock/{id}")
-    public StockDTO getStock(UUID id){
-        return stockService.getStock(id);
+    public StockDTO getStock(@PathVariable("id") UUID id){
+        try {
+            return stockService.getStock(id);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
     @GetMapping("/stocks")
     public List<StockDTO> getAllStocks(){
-        return stockService.getAllStocks();
+        try {
+            return stockService.getAllStocks();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
-
+    @PatchMapping("/stock/{id}")
+    public String updateStock(@PathVariable("id") StockDTO stockDto){
+        try {
+            return stockService.updateStock(stockDto);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    @DeleteMapping("/stock/{id}")
+    public String deleteStock(@PathVariable("id") UUID id){
+        try {
+            return stockService.deleteStock(id);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

@@ -14,12 +14,20 @@ public class TransactionController {
 
     @PostMapping("/user/{userid}/stock/{stockid}")
     public String getTransactionByUserIdAndStockId(@PathVariable("userid") UUID userid, @PathVariable("stockid") UUID stockid, @RequestBody TransactionDTO transactionDTO) {
-        return transactionService.getTransactionByUserIdAndStockId(userid, stockid, transactionDTO);
+        try {
+            return transactionService.getTransactionByUserIdAndStockId(userid, stockid, transactionDTO);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @PatchMapping("/transaction/{id}")
     public String deleteTransaction(@PathVariable("id") UUID id) {
-        return transactionService.deleteTransaction(id);
+        try {
+            return transactionService.deleteTransaction(id);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

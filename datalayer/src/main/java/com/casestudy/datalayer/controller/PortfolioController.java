@@ -14,13 +14,21 @@ class  PortfolioController {
     @Autowired
     private PortfolioService portfolioService;
 
-    @GetMapping("/portfolio/{id}")
-    public PortfolioDTO getPortfolio(@PathVariable("id") UUID id) {
-        return portfolioService.getPortfolio(id);
-    }
-
     @GetMapping("/user/{id}/portfolio")
     public PortfolioDTO getPortfolioByUserId(@PathVariable("id") UUID id) {
-        return portfolioService.getPortfolioByUserId(id);
+        try {
+            return portfolioService.getPortfolioByUserId(id);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @GetMapping("/portfolio/{id}")
+    public PortfolioDTO getPortfolio(@PathVariable("id") UUID id) {
+        try {
+            return portfolioService.getPortfolio(id);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

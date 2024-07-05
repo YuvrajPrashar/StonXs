@@ -19,35 +19,55 @@ public class StockService {
     MapperUtil mapperUtil;
 
     public String createStock(StockDTO stock){
-        stocksRepo.save(mapperUtil.mapStockDtoToStock(stock));
-        return "Stock created successfully";
+        try {
+            stocksRepo.save(mapperUtil.mapStockDtoToStock(stock));
+            return "Stock created successfully";
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
     public StockDTO getStock(UUID id){
-        Stock stock = stocksRepo.findById(id).orElse(null);
-        if(Objects.isNull(stock)){
-            return null;
+        try {
+            Stock stock = stocksRepo.findById(id).orElse(null);
+            if(Objects.isNull(stock)){
+                return null;
+            }
+            return mapperUtil.mapStockToStockDto(stock);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-        return mapperUtil.mapStockToStockDto(stock);
     }
     public String deleteStock(UUID id){
-        Stock stock = stocksRepo.findById(id).orElse(null);
-        if(stock == null){
-            return "Stock not found";
+        try {
+            Stock stock = stocksRepo.findById(id).orElse(null);
+            if(stock == null){
+                return "Stock not found";
+            }
+            stock.setDeleted(true);
+            return "Stock deleted successfully";
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-        stock.setDeleted(true);
-        return "Stock deleted successfully";
     }
     public String updateStock(StockDTO stockDto){
-        Stock stock =mapperUtil.mapStockDtoToStock(stockDto);
-        Stock stock1 = stocksRepo.findById(stock.getStockId()).orElse(null);
-        if(stock1 == null){
-            return "Stock not found";
+        try {
+            Stock stock =mapperUtil.mapStockDtoToStock(stockDto);
+            Stock stock1 = stocksRepo.findById(stock.getStockId()).orElse(null);
+            if(stock1 == null){
+                return "Stock not found";
+            }
+            stocksRepo.save(stock);
+            return "Stock updated successfully";
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-        stocksRepo.save(stock);
-        return "Stock updated successfully";
     }
     public List<StockDTO> getAllStocks(){
-        return mapperUtil.mapStockListToStockDTOList(stocksRepo.findAll());
+        try {
+            return mapperUtil.mapStockListToStockDTOList(stocksRepo.findAll());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
