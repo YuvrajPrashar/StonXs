@@ -82,10 +82,10 @@ public class UserService {
             return "User deletion failed " + e.getMessage();
         }
     }
-    public String updateUser(UserDTO userDTO){
+    public String updateUser(UUID id ,UserDTO userDTO){
         try {
             User user = mapperUtil.mapUserDtoToUser(userDTO);
-            User user1 = userRepo.findById(user.getUserId()).orElse(null);
+            User user1 = userRepo.findById(id).orElse(null);
             if(user1 == null){
                 return "User not found";
             }

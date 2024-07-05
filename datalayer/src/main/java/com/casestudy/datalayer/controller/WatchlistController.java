@@ -3,9 +3,7 @@ package com.casestudy.datalayer.controller;
 import com.casestudy.datalayer.dto.WatchlistDTO;
 import com.casestudy.datalayer.service.WatchlistService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -14,6 +12,24 @@ import java.util.UUID;
 public class WatchlistController {
     @Autowired
     private WatchlistService watchlistService;
+
+    @PatchMapping("/stock/{stockId}/watchlist/{userId}")
+    public String addStockToWatchlist(@PathVariable("stockId") UUID stockId, @PathVariable("userId") UUID userId) {
+        try {
+            return watchlistService.addStockToWatchlist(stockId, userId);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @PatchMapping("/watchlist/{id}/stock/{stockId}")
+    public String removeStockFromWatchlist(@PathVariable("id") UUID id, @PathVariable("stockId") UUID stockId) {
+        try {
+            return watchlistService.deleteStockFromWatchlist(id, stockId);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @GetMapping("/user/{id}/watchlist")
     public WatchlistDTO getWatchlistByUserId(@PathVariable("id") UUID id) {

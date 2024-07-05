@@ -13,7 +13,7 @@ public class UserController {
     @Autowired
     UserService UserService;
 
-    @PostMapping("/createUser")
+    @PostMapping("/user")
     public String createUser(@RequestBody UserDTO userDTO){
         try {
             return UserService.createUser(userDTO);
@@ -21,7 +21,7 @@ public class UserController {
             throw new RuntimeException(e);
         }
     }
-    @GetMapping("/getUser{id}")
+    @GetMapping("/user/{id}")
     public UserDTO getUser(@PathVariable("id") UUID id){
         try {
             return UserService.getUser(id);
@@ -29,7 +29,7 @@ public class UserController {
             throw new RuntimeException(e);
         }
     }
-    @GetMapping("/getAllUsers")
+    @GetMapping("/users")
     public List<UserDTO> getAllUsers(){
         try {
             return UserService.getAllUsers();
@@ -37,16 +37,16 @@ public class UserController {
             throw new RuntimeException(e);
         }
     }
-    @PatchMapping("/updateUser")
-    public String updateUser(@RequestBody UserDTO userDTO){
+    @PatchMapping("/user/{id}")
+    public String updateUser(@PathVariable ("id") UUID id, @RequestBody UserDTO userDTO){
         try {
-            return UserService.updateUser(userDTO);
+            return UserService.updateUser(id,userDTO);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
-    @DeleteMapping("/deleteUser")
-    public String deleteUser(@RequestBody UUID id){
+    @DeleteMapping("/user/{id}")
+    public String deleteUser(@PathVariable ("id") UUID id){
         try {
             return UserService.deleteUser(id);
         } catch (Exception e) {

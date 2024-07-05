@@ -11,12 +11,12 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class StockDTO {
-    @JsonProperty("stockName")
+    @JsonProperty("stockname")
   private String stockName;
     @JsonProperty("sector")
     private String sector;
-    @JsonProperty("stockSymbol")
+    @JsonProperty("stocksymbol")
     private String stockSymbol;
-    @JsonProperty("currentPrice")
+    @JsonProperty("currentprice")
     private String currentPrice;
   }

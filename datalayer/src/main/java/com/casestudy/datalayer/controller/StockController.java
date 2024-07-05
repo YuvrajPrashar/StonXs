@@ -13,7 +13,7 @@ public class StockController {
     @Autowired
     StockService stockService;
 
-    @PostMapping("/stock/{id}")
+    @PostMapping("/stock")
     public String createStock(@RequestBody StockDTO stockDto){
         try {
             return stockService.createStock(stockDto);
@@ -39,9 +39,9 @@ public class StockController {
         }
     }
     @PatchMapping("/stock/{id}")
-    public String updateStock(@PathVariable("id") StockDTO stockDto){
+    public String updateStock(@PathVariable("id") UUID id, @RequestBody StockDTO stockDto){
         try {
-            return stockService.updateStock(stockDto);
+            return stockService.updateStock(id,stockDto);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

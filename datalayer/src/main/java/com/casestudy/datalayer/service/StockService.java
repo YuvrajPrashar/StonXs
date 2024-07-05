@@ -49,14 +49,18 @@ public class StockService {
             throw new RuntimeException(e);
         }
     }
-    public String updateStock(StockDTO stockDto){
+    public String updateStock(UUID id,StockDTO stockDto){
         try {
             Stock stock =mapperUtil.mapStockDtoToStock(stockDto);
-            Stock stock1 = stocksRepo.findById(stock.getStockId()).orElse(null);
+            Stock stock1 = stocksRepo.findById(id).orElse(null);
             if(stock1 == null){
                 return "Stock not found";
             }
-            stocksRepo.save(stock);
+            stock1.setStockName(stock.getStockName());
+            stock1.setCurrentPrice(stock.getCurrentPrice());
+            stock1.setSector(stock.getSector());
+            stock1.setStockSymbol(stock.getStockSymbol());
+            stocksRepo.save(stock1);
             return "Stock updated successfully";
         } catch (Exception e) {
             throw new RuntimeException(e);
