@@ -1,4 +1,7 @@
+import { useState } from "react";
+
 const Orders = () => {
+  const [orders, setOrders] = useState(null);
   return (
     <div className="w-screen h-screen space-y-10 p-10 ">
       <div className="text-6xl text-center underline decoration-teal-600 underline-offset-8 decoration-2 font-thin">
@@ -29,6 +32,35 @@ const Orders = () => {
               </th>
             </tr>
           </thead>
+          <tbody>
+            {orders ? (
+              orders.map((order) => (
+                <tr key={order.id} className="bg-white">
+                  <td className="px-6 py-4 whitespace-nowrap">{order.id}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{order.stock}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{order.price}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {order.quantity}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {order.orderType}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {order.status}
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td
+                  colSpan="6"
+                  className="text-center text-6xl font-extrabold p-10"
+                >
+                  No Orders Yet
+                </td>
+              </tr>
+            )}
+          </tbody>
         </table>
       </div>
     </div>
