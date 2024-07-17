@@ -13,6 +13,7 @@ import com.casestudy.datalayer.repositary.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.util.UUID;
 
 @Service
@@ -54,10 +55,11 @@ public class TransactionService {
             transaction.setQuantity(quantity);
             transaction.setPrice(price);
             transaction.setTransactionType(transactiontype);
-
+            transaction.setStatus("Completed");
 
             if (transactiontype.equals("buy")) {
                 if (portfolio.getBalance() < quantity * price) {
+                    transaction.setStatus("Cancelled");
                     return "Insufficient balance";
                 }
                 portfolio.getStock().add(stock);
@@ -65,6 +67,7 @@ public class TransactionService {
                 portfolio.setTotalvalue(portfolio.getTotalvalue() + (int) (quantity * price));
                 portfolioRepo.save(portfolio);
                 transactionRepo.save(transaction);
+                stock.setMarketCap(stock.getMarketCap().subtract(new BigInteger(String.valueOf(quantity))));
                 return "Transaction successful";
             } else if (transactiontype.equals("sell")) {
                 portfolio.getStock().remove(stock);
@@ -72,6 +75,7 @@ public class TransactionService {
                 portfolio.setTotalvalue(portfolio.getTotalvalue() - (int) (quantity * price));
                 portfolioRepo.save(portfolio);
                 transactionRepo.save(transaction);
+                stock.setMarketCap(stock.getMarketCap().add(new BigInteger(String.valueOf(quantity))));
                 return "Transaction successful";
             }
 

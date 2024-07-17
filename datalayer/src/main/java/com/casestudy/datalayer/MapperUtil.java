@@ -8,11 +8,11 @@ import com.casestudy.datalayer.entity.Portfolio;
 import com.casestudy.datalayer.entity.Stock;
 import com.casestudy.datalayer.entity.User;
 import com.casestudy.datalayer.entity.Watchlist;
-import lombok.AllArgsConstructor;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Comment;
+
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
@@ -37,10 +37,10 @@ public class MapperUtil {
         return userList.stream().map(this::mapUserToUserDto).toList();
     }
     public Stock mapStockDtoToStock(StockDTO stockDTO){
-        return new Stock(stockDTO.getStockName(), stockDTO.getSector(), stockDTO.getStockSymbol(), stockDTO.getCurrentPrice());
+        return new Stock(stockDTO.getStockId(),stockDTO.getStockName(), stockDTO.getSector(), stockDTO.getStockSymbol(), stockDTO.getCurrentPrice());
     }
     public StockDTO mapStockToStockDto(Stock stock){
-        return new StockDTO(stock.getStockName(), stock.getSector(), stock.getStockSymbol(), stock.getCurrentPrice());
+        return new StockDTO(stock.getStockId(),stock.getStockName(), stock.getSector(), stock.getStockSymbol(), stock.getCurrentPrice());
     }
     public List<Stock> mapStockDTOListToStockList(List<StockDTO> stockDTOList){
         return stockDTOList.stream().map(this::mapStockDtoToStock).toList();

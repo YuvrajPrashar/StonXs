@@ -30,4 +30,5 @@ public class Transactions {
     private Long quantity;
     private float price;
     private boolean isDeleted=false;
+    private String status;
 }

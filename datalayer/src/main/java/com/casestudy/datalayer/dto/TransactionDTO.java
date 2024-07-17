@@ -19,4 +19,6 @@ public class TransactionDTO {
     private String transactionType;
     @JsonProperty("price")
     private float price;
+    @JsonProperty("status")
+    private String status;
 }
