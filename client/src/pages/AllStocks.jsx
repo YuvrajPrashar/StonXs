@@ -4,25 +4,56 @@ import SwapVertIcon from "@mui/icons-material/SwapVert";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { FormatListBulleted, WindowSharp } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+
 const AllStocks = () => {
   const [stocksDATA, setStocksDATA] = useState([]);
+  const [sortedStocks, setSortedStocks] = useState([]);
   const [grid, setGrid] = useState(true);
+  const [sortOption, setSortOption] = useState("price");
+
   useEffect(() => {
     axios.get("http://localhost:8080/stocks").then((res) => {
       setStocksDATA(res.data);
+      setSortedStocks(res.data);
     });
   }, []);
+
+  useEffect(() => {
+    let sortedData = [...stocksDATA];
+    switch (sortOption) {
+      case "price":
+        sortedData.sort((a, b) => a.currentprice - b.currentprice);
+        break;
+      case "alphabets":
+        sortedData.sort((a, b) => a.stockname.localeCompare(b.stockname));
+        break;
+      case "reverseAlphabets":
+        sortedData.sort((a, b) => b.stockname.localeCompare(a.stockname));
+        break;
+      default:
+        break;
+    }
+    setSortedStocks(sortedData);
+  }, [sortOption, stocksDATA]);
+
   const layoutHandler = () => {
     setGrid(!grid);
   };
+
   return (
     <>
       <div className="p-2 grid grid-flow-col w-screen justify-stretch content-center">
         <div className="p-3 justify-self-start">
           <SwapVertIcon />
           <label htmlFor="sort"> Sort By</label>
-          <select name="sort" id="sort" className="bg-transparent">
+          <select
+            name="sort"
+            id="sort"
+            className="bg-transparent"
+            onChange={(e) => {
+              setSortOption(e.target.value);
+            }}
+          >
             <option value="price">Price</option>
             <option value="alphabets">A-Z</option>
             <option value="reverseAlphabets">Z-A</option>
@@ -34,8 +65,8 @@ const AllStocks = () => {
         </div>
       </div>
       {grid && (
-        <div className=" w-5/6 mx-auto m-y-2 grid grid-cols-5 gap-4">
-          {stocksDATA.map((stockElm) => {
+        <div className="w-5/6 mx-auto my-2 grid grid-cols-5 gap-4">
+          {sortedStocks.map((stockElm) => {
             return (
               <StocksCard
                 key={stockElm.stockid}
@@ -51,8 +82,8 @@ const AllStocks = () => {
       )}
 
       {!grid && (
-        <div className="w-5/6 h-screen shadow-xl mx-auto m-y-2 overflow-auto">
-          <Stockstable stocks={stocksDATA} />
+        <div className="w-5/6 h-screen shadow-xl mx-auto my-2 overflow-auto">
+          <Stockstable stocks={sortedStocks} />
         </div>
       )}
     </>
