@@ -1,4 +1,3 @@
-import StocksData from "../Utils/Data.js";
 import Stockstable from "./Stockstable.jsx";
 
 const Holdings = () => {
