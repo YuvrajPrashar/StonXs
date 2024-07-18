@@ -12,9 +12,9 @@ const Holdings = () => {
           <Stockstable />
         </div>
       ) : (
-        <h2 className="text-center text-2xl text-gray-500 my-8">
+        <div className="text-center text-6xl font-extrabold p-10">
           You have not purchased anything yet
-        </h2>
+        </div>
       )}
     </div>
   );

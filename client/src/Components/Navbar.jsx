@@ -2,6 +2,13 @@ import SearchIcon from "@mui/icons-material/Search";
 import PersonIcon from "@mui/icons-material/Person";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import {
+  LoginOutlined,
+  LoginRounded,
+  LoginSharp,
+  LoginTwoTone,
+  LogoutOutlined,
+} from "@mui/icons-material";
 
 const Navbar = () => {
   const [loggedIn, setLoggedIn] = useState(true);
@@ -22,9 +29,11 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="top-0 flex w-full items-center p-3 gap-3 bg-gray-800 text-white">
-      <div className="text-4xl font-bold w-max">Stonks</div>
-      <form className="flex w-3/5 gap-2 justify-evenly">
+    <nav className="top-0 flex w-screen items-center py-3 px-5 gap-3 space-x-2 bg-gray-800 text-white">
+      <div className="text-4xl font-bold w-max">
+        <Link to="/">Stonks</Link>
+      </div>
+      <form className="flex w-1/5 gap-2 justify-evenly">
         <input
           type="text"
           name="search"
@@ -35,18 +44,15 @@ const Navbar = () => {
           <SearchIcon />
         </button>
       </form>
-      <div className="flex flex-1 justify-evenly items-center space-x-4 mt-2 md:mt-0">
-        <Link to="/" className="hover:text-gray-400 cursor-pointer">
-          Home
-        </Link>
+      <div className="flex flex-1 justify-start text-xl content-center w-max ">
         <Link to="/stocks" className="hover:text-gray-400 cursor-pointer">
           Explore
         </Link>
       </div>
-      <div className="flex items-center space-x-2 mt-2 ml-auto md:mt-0">
-        <PersonIcon />
+      <div className="flex items-center mt-2 ml-auto md:mt-0">
         {loggedIn ? (
-          <div className="hover:text-gray-400 cursor-pointer">
+          <div className="hover:text-gray-400 cursor-pointer space-x-2 align-bottom text-xl content-center">
+            <PersonIcon />
             <select
               className="bg-gray-800 border-0 text-white focus:outline-none hover:text-gray-400 cursor-pointer"
               onChange={handleSelectChange}
@@ -61,9 +67,10 @@ const Navbar = () => {
             </select>
           </div>
         ) : (
-          <Link to="/login" className="hover:text-gray-400 cursor-pointer">
-            Log In
-          </Link>
+          <div className="hover:text-gray-400 cursor-pointer space-x-2 align-bottom text-xl content-center">
+            <LoginSharp />
+            <Link to="/login">Log In</Link>
+          </div>
         )}
       </div>
     </nav>
