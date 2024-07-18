@@ -24,32 +24,43 @@ const Stockstable = () => {
           </tr>
         </thead>
         <tbody>
-          {StocksData.map((stock) => {
-            return (
-              <tr
-                key={stock.id}
-                className="bg-white border-b  hover:bg-gray-50 "
-              >
-                <th
-                  scope="row"
-                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
+          {StocksData ? (
+            StocksData.map((stock) => {
+              return (
+                <tr
+                  key={stock.id}
+                  className="bg-white border-b  hover:bg-gray-50 "
                 >
-                  {stock.stockSymbl}
-                </th>
-                <td className="px-6 py-4">{stock.stockName}</td>
-                <td className="px-6 py-4">{stock.current_price}</td>
-                <td className="px-6 py-4">{stock.category}</td>
-                <td className="px-6 py-4 text-right">
-                  <a
-                    href="#"
-                    className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                  <th
+                    scope="row"
+                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
                   >
-                    Buy/Sell
-                  </a>
-                </td>
-              </tr>
-            );
-          })}
+                    {stock.stockSymbl}
+                  </th>
+                  <td className="px-6 py-4">{stock.stockName}</td>
+                  <td className="px-6 py-4">{stock.current_price}</td>
+                  <td className="px-6 py-4">{stock.category}</td>
+                  <td className="px-6 py-4 text-right">
+                    <a
+                      href="#"
+                      className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                    >
+                      Buy/Sell
+                    </a>
+                  </td>
+                </tr>
+              );
+            })
+          ) : (
+            <tr>
+              <td
+                colSpan="5"
+                className="text-center text-6xl font-extrabold p-10"
+              >
+                No Data Yet
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
     </>
