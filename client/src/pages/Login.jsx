@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState } from "react";
 
 const Login = () => {
@@ -10,7 +11,25 @@ const Login = () => {
   });
 
   const signInHandler = () => {
-    signUp ? console.log("Sign Up") : console.log("sign in");
+    signUp
+      ? axios
+          .post("http://localhost:8080/user", data)
+          .then((res) => {
+            console.log(res.data);
+          })
+          .catch()
+          .finally(console.log(data))
+      : axios
+          axios
+            .post("http://localhost:8080/login", data, { withCredentials: true })
+
+            .then((res) => {
+              console.log(res.data);
+            })
+            .catch((error) => {
+              console.log(error);
+            })
+            .finally(console.log(data));
   };
 
   const signupHandler = () => {
