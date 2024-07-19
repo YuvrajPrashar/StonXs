@@ -57,17 +57,17 @@ public class WatchlistService {
         }
     }
 
-    public String addStockToWatchlist(UUID stockId, UUID userId) {
+    public String addStockToWatchlist(UUID stockId, UUID watchlisId) {
         try {
-            User user = userRepo.findById(userId).orElse(null);
-            if (user == null) {
-                return "User not found";
-            }
+
             Stock stock = stocksRepo.findById(stockId).orElse(null);
             if (stock == null) {
                 return "Stock not found";
             }
-            Watchlist watchlist = user.getWatchlist();
+            Watchlist watchlist = watchListRepo.findById(watchlisId).orElse(null);
+            if (watchlist == null) {
+                return "watchlist not found";
+            }
             if (watchlist.getStock().contains(stock)) {
                 return "Stock already exists in watchlist";
             }

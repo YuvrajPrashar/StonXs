@@ -1,14 +1,22 @@
-import {
-  Add,
-  AddCircleOutline,
-  AddRounded,
-  CreateTwoTone,
-} from "@mui/icons-material";
+import { AddCircleOutline } from "@mui/icons-material";
 import axios from "axios";
-import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const StockInfo = (props) => {
+  const watchListHandler = () => {
+    const watchlistId = Cookies.get("watchlistId");
+    axios
+      .patch(
+        `http://localhost:8080/stock/${props.stockData.stockid}/watchlist/${watchlistId}`
+      )
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   return (
     <>
       <div className="bg-white shadow-md border-2  hover:shadow-lg rounded-3xl p-6 transition-shadow duration-300 ease-in-out my-4">
@@ -17,7 +25,7 @@ const StockInfo = (props) => {
             {props.stockData?.stocksymbol}
           </div>
           <div className="justify-self-end">
-            <AddCircleOutline />
+            <AddCircleOutline onClick={watchListHandler} />
           </div>
           <div className="col-span-3 font-semibold text-lg">
             {props.stockData?.sector}

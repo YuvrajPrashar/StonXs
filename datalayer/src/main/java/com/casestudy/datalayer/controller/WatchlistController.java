@@ -13,10 +13,10 @@ public class WatchlistController {
     @Autowired
     private WatchlistService watchlistService;
 
-    @PatchMapping("/stock/{stockId}/watchlist/{userId}")
-    public String addStockToWatchlist(@PathVariable("stockId") UUID stockId, @PathVariable("userId") UUID userId) {
+    @PatchMapping("/stock/{stockId}/watchlist/{watchlisId}")
+    public String addStockToWatchlist(@PathVariable("stockId") UUID stockId, @PathVariable("watchlisId") UUID watchlisId) {
         try {
-            return watchlistService.addStockToWatchlist(stockId, userId);
+            return watchlistService.addStockToWatchlist(stockId, watchlisId);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

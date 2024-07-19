@@ -22,7 +22,6 @@ const Login = () => {
       : axios
           axios
             .post("http://localhost:8080/login", data, { withCredentials: true })
-
             .then((res) => {
               console.log(res.data);
             })

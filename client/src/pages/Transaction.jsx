@@ -23,7 +23,7 @@ const Transaction = () => {
         <TradingView />
       </div>{" "}
       <div className="w-auto">
-        <StockCard stock={StockData} />
+        <StockCard stock={StockData}  />
       </div>
     </div>
   );
