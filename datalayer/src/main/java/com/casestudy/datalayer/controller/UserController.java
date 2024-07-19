@@ -2,6 +2,7 @@ package com.casestudy.datalayer.controller;
 import com.casestudy.datalayer.dto.UserDTO;
 import com.casestudy.datalayer.entity.User;
 import com.casestudy.datalayer.service.UserService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +18,14 @@ public class UserController {
     public String createUser(@RequestBody UserDTO userDTO){
         try {
             return UserService.createUser(userDTO);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    @PostMapping("/login")
+    public String login(@RequestBody UserDTO userDTO, HttpServletResponse response) {
+        try {
+            return UserService.login(userDTO, response);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

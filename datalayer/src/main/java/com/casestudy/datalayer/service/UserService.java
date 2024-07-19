@@ -8,9 +8,15 @@ import com.casestudy.datalayer.entity.Watchlist;
 import com.casestudy.datalayer.repositary.PortfolioRepo;
 import com.casestudy.datalayer.repositary.UserRepo;
 import com.casestudy.datalayer.repositary.WatchListRepo;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.casestudy.datalayer.dto.UserDTO;
+import java.util.List;
+import java.util.UUID;
+
 
 import java.util.List;
 import java.util.UUID;
@@ -96,6 +102,23 @@ public class UserService {
             return "User updated successfully";
         } catch (Exception e) {
             return "User updation failed " + e.getMessage();
+        }
+    }
+
+    public String login(UserDTO userDTO , HttpServletResponse response) {
+        try {
+            User user = userRepo.findByUsername(userDTO.getUsername());
+            if(user == null){
+                return "User not found";
+            }
+            if(user.getPassword().equals(userDTO.getPassword())){
+                Cookie cookie = new Cookie("userId", user.getUserId().toString());
+                response.addCookie(cookie);
+                return "Login successful";
+            }
+            return "Login failed here ";
+        } catch (Exception e) {
+            return "Login failed from exception" + e.getMessage();
         }
     }
 }
