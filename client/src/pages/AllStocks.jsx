@@ -4,19 +4,31 @@ import SwapVertIcon from "@mui/icons-material/SwapVert";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { FormatListBulleted, WindowSharp } from "@mui/icons-material";
+import { useParams } from "react-router-dom";
 
 const AllStocks = () => {
+  const { category } = useParams();
   const [stocksDATA, setStocksDATA] = useState([]);
   const [sortedStocks, setSortedStocks] = useState([]);
   const [grid, setGrid] = useState(true);
   const [sortOption, setSortOption] = useState("price");
 
   useEffect(() => {
-    axios.get("http://localhost:8080/stocks").then((res) => {
-      setStocksDATA(res.data);
-      setSortedStocks(res.data);
-    });
-  }, []);
+    const fetchStocks = async () => {
+      try {
+        const response = category
+          ? await axios.get(`http://localhost:8080/stocks/${category}`)
+          : await axios.get("http://localhost:8080/stocks");
+
+        setStocksDATA(response.data);
+        setSortedStocks(response.data);
+      } catch (error) {
+        console.error("Error fetching stocks:", error);
+      }
+    };
+
+    fetchStocks();
+  }, [category]);
 
   useEffect(() => {
     let sortedData = [...stocksDATA];

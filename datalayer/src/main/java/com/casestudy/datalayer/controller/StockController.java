@@ -38,6 +38,14 @@ public class StockController {
             throw new RuntimeException(e);
         }
     }
+    @GetMapping("/stocks/{category}")
+    public List<StockDTO> getStocksByCategory(@PathVariable String category){
+        try {
+            return stockService.getStocksByCategory(category);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
     @PatchMapping("/stock/{id}")
     public String updateStock(@PathVariable("id") UUID id, @RequestBody StockDTO stockDto){
         try {

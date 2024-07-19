@@ -75,4 +75,12 @@ public class StockService {
     }
 
 
+    public List<StockDTO> getStocksByCategory(String category) {
+        try {
+            System.out.println(stocksRepo.findAllByCategory(category))    ;
+            return mapperUtil.mapStockListToStockDTOList(stocksRepo.findAllByCategory(category));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

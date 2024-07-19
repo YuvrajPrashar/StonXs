@@ -9,18 +9,25 @@ import Footer from "./Components/footer.jsx";
 import Orders from "./pages/Orders.jsx";
 import Navbar from "./Components/Navbar.jsx";
 
+const routes = [
+  { path: "/", element: <Home /> },
+  { path: "/stocks", element: <AllStocks /> },
+  { path: "/stocks/:category", element: <AllStocks /> },
+  { path: "/login", element: <Login /> },
+  { path: "/stock/:stockid", element: <Transaction /> },
+  { path: "/portfolio", element: <Portfolio /> },
+  { path: "/watchlist", element: <WatchList /> },
+  { path: "/orders", element: <Orders /> },
+];
+
 function App() {
   return (
     <>
       <Navbar />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/stocks" element={<AllStocks />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/stock/:stockid" element={<Transaction />} />
-        <Route path="/portfolio" element={<Portfolio />} />
-        <Route path="/watchlist" element={<WatchList />} />
-        <Route path="/orders" element={<Orders />} />
+        {routes.map((route, index) => (
+          <Route key={index} path={route.path} element={route.element} />
+        ))}
       </Routes>
       <Footer />
     </>
