@@ -9,7 +9,9 @@ const Login = () => {
     password: "",
   });
 
-  const signInHandler = () => {};
+  const signInHandler = () => {
+    signUp ? console.log("Sign Up") : console.log("sign in");
+  };
 
   const signupHandler = () => {
     setSignUp(!signUp);

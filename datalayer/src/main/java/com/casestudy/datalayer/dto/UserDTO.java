@@ -11,6 +11,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDTO {
+    @JsonProperty("fullname")
+    private String fullname;
     @JsonProperty("username")
     private String username;
     @JsonProperty("password")

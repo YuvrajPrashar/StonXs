@@ -17,6 +17,8 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID userId;
+    private String fullname;
+    @Column(unique = true)
     private String username;
     private String password;
     @Column(unique = true)
@@ -28,7 +30,8 @@ public class User {
     private Watchlist watchlist;
 
 
-    public User(String username, String password, String email) {
+    public User(String username, String password, String email , String fullname) {
+        this.fullname=fullname;
         this.username = username;
         this.password = password;
         this.email = email;

@@ -25,10 +25,10 @@ import java.util.List;
 public class MapperUtil {
 
     public User mapUserDtoToUser(UserDTO userDTO){
-        return new User(userDTO.getUsername(), userDTO.getPassword(), userDTO.getEmail());
+        return new User(userDTO.getUsername(), userDTO.getPassword(), userDTO.getEmail() , userDTO.getFullname());
     }
     public UserDTO mapUserToUserDto(User user){
-        return new UserDTO(user.getUsername(), user.getPassword(), user.getEmail());
+        return new UserDTO(user.getFullname(), user.getUsername(), user.getPassword(), user.getEmail());
     }
     public List<User> mapUserDTOListToUserList(List<UserDTO> userDTOList){
         return userDTOList.stream().map(this::mapUserDtoToUser).toList();

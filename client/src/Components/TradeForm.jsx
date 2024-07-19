@@ -1,4 +1,10 @@
+import { useState } from "react";
+
 const TradeForm = ({ stockData }) => {
+  const [activeButton, setActiveButton] = useState(null);
+  const handleClick = (button) => {
+    setActiveButton(button);
+  };
   return (
     <form
       className="w-full text-lg my-4 p-4 border-2 border-gray-200 rounded-lg"
@@ -7,10 +13,24 @@ const TradeForm = ({ stockData }) => {
       }}
     >
       <div className="w-full h-10 gap-3 flex mx-auto my-2">
-        <button className="w-1/2 text-white font-bold bg-red-500 rounded-xl">
+        <button
+          className={`w-1/2 font-bold rounded-xl  border-2 border-red-500 ${
+            activeButton === "buy"
+              ? "bg-red-500 text-white"
+              : "bg-white text-red-500"
+          }`}
+          onClick={() => handleClick("buy")}
+        >
           Buy
         </button>
-        <button className="w-1/2 bg-green-500 rounded-xl text-white font-bold">
+        <button
+          className={`w-1/2 font-bold rounded-xl  border-2 border-green-500 ${
+            activeButton === "sell"
+              ? "bg-green-500 text-white"
+              : "bg-white text-green-500"
+          }`}
+          onClick={() => handleClick("sell")}
+        >
           Sell
         </button>
       </div>
