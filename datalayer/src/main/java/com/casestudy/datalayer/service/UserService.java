@@ -1,7 +1,6 @@
 package com.casestudy.datalayer.service;
 
 import com.casestudy.datalayer.MapperUtil;
-import com.casestudy.datalayer.dto.PortfolioDTO;
 import com.casestudy.datalayer.entity.Portfolio;
 import com.casestudy.datalayer.entity.User;
 import com.casestudy.datalayer.entity.Watchlist;
@@ -10,7 +9,6 @@ import com.casestudy.datalayer.repositary.UserRepo;
 import com.casestudy.datalayer.repositary.WatchListRepo;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.casestudy.datalayer.dto.UserDTO;
@@ -112,8 +110,24 @@ public class UserService {
                 return "User not found";
             }
             if(user.getPassword().equals(userDTO.getPassword())){
-                Cookie cookie = new Cookie("userId", user.getUserId().toString());
-                response.addCookie(cookie);
+                Cookie userIdCookie = new Cookie("userId", user.getUserId().toString());
+                userIdCookie.setMaxAge(60*60*24);
+                userIdCookie.setPath("/");
+                userIdCookie.setHttpOnly(true);
+
+                Cookie watchlistIdCookie = new Cookie("watchlistId", user.getWatchlist().getWatchlistId().toString());
+                watchlistIdCookie.setMaxAge(60*60*24);
+                watchlistIdCookie.setHttpOnly(true);
+                watchlistIdCookie.setPath("/");
+
+                Cookie portfolioIdCookie = new Cookie("portfolioId", user.getPortfolio().getPortfolioId().toString());
+                portfolioIdCookie.setMaxAge(60*60*24);
+                portfolioIdCookie.setHttpOnly(true);
+                portfolioIdCookie.setPath("/");
+
+                response.addCookie(userIdCookie);
+                response.addCookie(watchlistIdCookie);
+                response.addCookie(portfolioIdCookie);
                 return "Login successful";
             }
             return "Login failed here ";
