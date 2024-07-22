@@ -1,12 +1,15 @@
 import SearchIcon from "@mui/icons-material/Search";
 import PersonIcon from "@mui/icons-material/Person";
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { LoginSharp } from "@mui/icons-material";
 
 const Navbar = () => {
   const [loggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const [selectedValue, setSelectedValue] = useState("");
+
   useEffect(() => {
     const loggedInChecker = () => {
       if (localStorage.getItem("userId")) {
@@ -17,8 +20,23 @@ const Navbar = () => {
     };
     loggedInChecker();
   }, []);
+
+  useEffect(() => {
+    const path = location.pathname.split("/")[1];
+    if (path === "portfolio") {
+      setSelectedValue("Portfolio");
+    } else if (path === "watchlist") {
+      setSelectedValue("Watchlist");
+    } else if (path === "orders") {
+      setSelectedValue("Orders");
+    } else {
+      setSelectedValue("profile");
+    }
+  }, [location]);
+
   const handleSelectChange = (event) => {
     const value = event.target.value;
+    setSelectedValue(value);
     if (value === "Portfolio") {
       navigate("/portfolio");
     } else if (value === "Watchlist") {
@@ -59,11 +77,10 @@ const Navbar = () => {
             <PersonIcon />
             <select
               className="bg-gray-800 border-0 text-white focus:outline-none hover:text-gray-400 cursor-pointer"
+              value={selectedValue}
               onChange={handleSelectChange}
             >
-              <option value="profile" defaultChecked>
-                Profile
-              </option>
+              <option value="profile">Profile</option>
               <option value="Portfolio">Portfolio</option>
               <option value="Watchlist">Watchlist</option>
               <option value="Orders">Orders</option>
