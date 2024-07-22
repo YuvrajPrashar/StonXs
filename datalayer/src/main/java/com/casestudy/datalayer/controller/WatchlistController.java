@@ -47,8 +47,8 @@ public class WatchlistController {
             throw new RuntimeException(e);
         }
     }
-    @GetMapping("/watchlist/{id}")
-    public WatchlistDTO getWatchlist(@PathVariable("id") UUID id) {
+    @GetMapping("/watchlist/{watchListId}")
+    public WatchlistDTO getWatchlist(@PathVariable("WatchListId") UUID id) {
         try {
             return watchlistService.getWatchlist(id);
         } catch (Exception e) {

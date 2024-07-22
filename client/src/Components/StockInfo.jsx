@@ -1,6 +1,5 @@
 import { AddCircleOutline } from "@mui/icons-material";
 import axios from "axios";
-import { useParams } from "react-router-dom";
 import Cookies from "js-cookie";
 
 const StockInfo = (props) => {
