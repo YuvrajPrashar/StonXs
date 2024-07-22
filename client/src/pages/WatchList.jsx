@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
 import Stockstable from "../Components/Stockstable";
 import axios from "axios";
-import Cookies from "js-cookie";
-
 const WatchList = () => {
-  const [stocksData, setStocks] = useState();
-  const watchlistId = Cookies.get("watchlistId");
+  const [stocksData, setStocks] = useState(null);
+  const watchlistId = localStorage.getItem("watchlistId");
   useEffect(() => {
     axios
       .get(`http://localhost:8080/watchlist/${watchlistId}`)

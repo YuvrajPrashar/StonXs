@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 
 const StockInfo = (props) => {
   const watchListHandler = () => {
-    const watchlistId = Cookies.get("watchlistId");
+    const watchlistId = localStorage.getItem("watchlistId");
     axios
       .patch(
         `http://localhost:8080/stock/${props.stockData.stockid}/watchlist/${watchlistId}`

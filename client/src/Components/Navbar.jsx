@@ -1,19 +1,22 @@
 import SearchIcon from "@mui/icons-material/Search";
 import PersonIcon from "@mui/icons-material/Person";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  LoginOutlined,
-  LoginRounded,
-  LoginSharp,
-  LoginTwoTone,
-  LogoutOutlined,
-} from "@mui/icons-material";
+import { LoginSharp } from "@mui/icons-material";
 
 const Navbar = () => {
-  const [loggedIn, setLoggedIn] = useState(true);
+  const [loggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
-
+  useEffect(() => {
+    const loggedInChecker = () => {
+      if (localStorage.getItem("userId")) {
+        setLoggedIn(true);
+      } else {
+        setLoggedIn(false);
+      }
+    };
+    loggedInChecker();
+  }, []);
   const handleSelectChange = (event) => {
     const value = event.target.value;
     if (value === "Portfolio") {
@@ -21,6 +24,7 @@ const Navbar = () => {
     } else if (value === "Watchlist") {
       navigate("/watchlist");
     } else if (value === "Logout") {
+      localStorage.clear();
       setLoggedIn(false);
       navigate("/login");
     } else if (value === "Orders") {
@@ -57,8 +61,8 @@ const Navbar = () => {
               className="bg-gray-800 border-0 text-white focus:outline-none hover:text-gray-400 cursor-pointer"
               onChange={handleSelectChange}
             >
-              <option value="Username" defaultChecked>
-                Yuvraj Prashar
+              <option value="profile" defaultChecked>
+                Profile
               </option>
               <option value="Portfolio">Portfolio</option>
               <option value="Watchlist">Watchlist</option>

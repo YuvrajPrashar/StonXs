@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [data, setData] = useState({
@@ -8,17 +8,27 @@ const Login = () => {
     password: "",
   });
 
- const signInHandler = () => {
-    axios.post("http://localhost:8080/login", data, { withCredentials: true })
+  const navigate = useNavigate();
+
+  const signInHandler = () => {
+    axios
+      .post("http://localhost:8080/login", data, { withCredentials: true })
       .then((res) => {
-        console.log('Response:', res);
-        console.log(`userId: ${res.headers['userid']}, watchlistId: ${res.headers['watchlistid']}, portfolioId: ${res.headers['portfolioid']}`);
-        localStorage.setItem('userId', res.headers['userid']);
-        localStorage.setItem('watchlistId', res.headers['watchlistid']);
-        localStorage.setItem('portfolioId', res.headers['portfolioid']);
+        console.log("Response:", res);
+        console.log(
+          `userId: ${res.headers["userid"]}, watchlistId: ${res.headers["watchlistid"]}, portfolioId: ${res.headers["portfolioid"]}`
+        );
+        localStorage.setItem("userId", res.headers["userid"]);
+        localStorage.setItem("watchlistId", res.headers["watchlistid"]);
+        localStorage.setItem("portfolioId", res.headers["portfolioid"]);
+        navigate("/");
+        window.location.reload();
       })
       .catch((error) => {
-        console.log('Login Error:', error.response ? error.response.data : error.message);
+        console.log(
+          "Login Error:",
+          error.response ? error.response.data : error.message
+        );
       });
   };
 
