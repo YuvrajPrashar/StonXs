@@ -1,10 +1,32 @@
-import { useState } from "react";
+import axios from "axios";
+import { useRef, useState } from "react";
 
 const TradeForm = ({ stockData }) => {
-  const [activeButton, setActiveButton] = useState(null);
+  const [activeButton, setActiveButton] = useState("buy");
+  const quantityRef = useRef();
+  const priceRef = useRef();
+
+  const userId = localStorage.getItem("userId");
+  const stockId = stockData?.stockid;
+
+  const tradeHandler = () => {
+    const data = {
+      quantity: quantityRef.current.value,
+      price: priceRef.current.value,
+      transactiontype: activeButton,
+      status: "pending",
+    };
+    axios
+      .post(`http://localhost:8080/user/${userId}/stock/${stockId}`, data)
+      .then((res) => {
+        console.log(res);
+      });
+  };
+
   const handleClick = (button) => {
     setActiveButton(button);
   };
+
   return (
     <form
       className="w-full text-lg my-4 p-4 border-2 border-gray-200 rounded-lg"
@@ -14,6 +36,7 @@ const TradeForm = ({ stockData }) => {
     >
       <div className="w-full h-10 gap-3 flex mx-auto my-2">
         <button
+          type="button"
           className={`w-1/2 font-bold rounded-xl  border-2 border-red-500 ${
             activeButton === "buy"
               ? "bg-red-500 text-white"
@@ -24,6 +47,7 @@ const TradeForm = ({ stockData }) => {
           Buy
         </button>
         <button
+          type="button"
           className={`w-1/2 font-bold rounded-xl  border-2 border-green-500 ${
             activeButton === "sell"
               ? "bg-green-500 text-white"
@@ -55,16 +79,22 @@ const TradeForm = ({ stockData }) => {
         />
         <input
           type="number"
-          placeholder="Buy Quantity"
+          placeholder={`${activeButton === "buy" ? "Buy" : "Sell"} Quantity`}
           className="border-b-2 font-semibold focus:outline-none placeholder:font-semibold"
+          ref={quantityRef}
         />
         <input
           type="number"
-          placeholder="Buy Price"
+          placeholder={`${activeButton === "buy" ? "Buy" : "Sell"} Price`}
           className="border-b-2 font-semibold focus:outline-none placeholder:font-semibold"
+          ref={priceRef}
         />
       </div>
-      <button className="my-2 border-0 w-full text-lg h-10 font-bold text-white rounded-md bg-cyan-500">
+      <button
+        type="button"
+        className="my-2 border-0 w-full text-lg h-10 font-bold text-white rounded-md bg-cyan-500"
+        onClick={tradeHandler}
+      >
         Confirm Trade
       </button>
     </form>

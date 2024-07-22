@@ -44,7 +44,7 @@ const Navbar = () => {
     } else if (value === "Logout") {
       localStorage.clear();
       setLoggedIn(false);
-      navigate("/login");
+      navigate("/");
     } else if (value === "Orders") {
       navigate("/orders");
     }
@@ -80,7 +80,9 @@ const Navbar = () => {
               value={selectedValue}
               onChange={handleSelectChange}
             >
-              <option value="profile">Profile</option>
+              <option value="profile" disabled>
+                Profile
+              </option>
               <option value="Portfolio">Portfolio</option>
               <option value="Watchlist">Watchlist</option>
               <option value="Orders">Orders</option>

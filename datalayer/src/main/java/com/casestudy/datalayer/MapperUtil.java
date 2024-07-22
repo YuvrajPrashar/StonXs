@@ -1,13 +1,7 @@
 package com.casestudy.datalayer;
 
-import com.casestudy.datalayer.dto.PortfolioDTO;
-import com.casestudy.datalayer.dto.StockDTO;
-import com.casestudy.datalayer.dto.UserDTO;
-import com.casestudy.datalayer.dto.WatchlistDTO;
-import com.casestudy.datalayer.entity.Portfolio;
-import com.casestudy.datalayer.entity.Stock;
-import com.casestudy.datalayer.entity.User;
-import com.casestudy.datalayer.entity.Watchlist;
+import com.casestudy.datalayer.dto.*;
+import com.casestudy.datalayer.entity.*;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -72,4 +66,6 @@ public class MapperUtil {
     public List<Watchlist> mapWatchlistDTOListToWatchlistList(List<WatchlistDTO> watchlistDTOList){
         return watchlistDTOList.stream().map(this::mapWatchlistDtoToWatchlist).toList();
     }
+
+
 }

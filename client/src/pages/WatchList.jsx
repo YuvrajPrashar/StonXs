@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Stockstable from "../Components/Stockstable";
 import axios from "axios";
 const WatchList = () => {
-  const [stocksData, setStocks] = useState(null);
+  const [stocksData, setStocks] = useState([]);
   const watchlistId = localStorage.getItem("watchlistId");
   useEffect(() => {
     axios

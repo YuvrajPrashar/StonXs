@@ -1,11 +1,22 @@
+import { useEffect, useState } from "react";
 import Holdings from "../Components/Holdings.jsx";
 import Report from "../Components/Report.jsx";
+import axios from "axios";
 const Portfolio = () => {
+  const [data, setData] = useState(null);
+
+  const portfolioId = localStorage.getItem("portfolioId");
+
+  useEffect(() => {
+    axios.get(`http://localhost:8080/portfolio/${portfolioId}`).then((res) => {
+      setData(res.data);
+    });
+  }, []);
   return (
     <div className="h-screen">
       <div className="flex h-full ">
-        <Holdings />
-        <Report />
+        {data && <Holdings holdings={data.stocks} />}
+        {data && <Report PNL={data.profit} InvestedValue={data.investedvalue} CurrentValue={data.totalvalue} Balance={data.balance} />}
       </div>
     </div>
   );

@@ -30,4 +30,13 @@ public class TransactionController {
         }
     }
 
+    @GetMapping("/transactions/{userid}")
+    public TransactionDTO getTransactionByUserId(@PathVariable("userid") UUID userid) {
+        try {
+            return transactionService.getTransactionByUserId(userid);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

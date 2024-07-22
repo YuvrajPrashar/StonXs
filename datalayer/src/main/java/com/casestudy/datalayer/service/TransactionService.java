@@ -101,4 +101,17 @@ public class TransactionService {
             throw new RuntimeException(e);
         }
     }
+
+    public TransactionDTO getTransactionByUserId(UUID userid) {
+        try {
+            User user = userRepo.findById(userid).orElse(null);
+            if (user == null) {
+                return null;
+            }
+            Portfolio portfolio = user.getPortfolio();
+            return mapperUtil.mapTransactionToTransactionDTO(portfolio.getTransactions());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
