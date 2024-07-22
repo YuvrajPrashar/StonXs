@@ -8,12 +8,14 @@ import { Routes, Route } from "react-router-dom";
 import Footer from "./Components/footer.jsx";
 import Orders from "./pages/Orders.jsx";
 import Navbar from "./Components/Navbar.jsx";
+import SignUp from "./pages/SignUp.jsx";
 
 const routes = [
   { path: "/", element: <Home /> },
   { path: "/stocks", element: <AllStocks /> },
   { path: "/stocks/:category", element: <AllStocks /> },
   { path: "/login", element: <Login /> },
+  { path: "/signup", element: <SignUp /> },
   { path: "/stock/:stockid", element: <Transaction /> },
   { path: "/portfolio", element: <Portfolio /> },
   { path: "/watchlist", element: <WatchList /> },

@@ -2,23 +2,22 @@ import axios from "axios";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-const Login = () => {
+const SignUp = () => {
   const [data, setData] = useState({
+    fullname: "",
     username: "",
+    email: "",
     password: "",
   });
 
- const signInHandler = () => {
-    axios.post("http://localhost:8080/login", data, { withCredentials: true })
+  const signUpHandler = () => {
+    axios
+      .post("http://localhost:8080/user", data)
       .then((res) => {
-        console.log('Response:', res);
-        console.log(`userId: ${res.headers['userid']}, watchlistId: ${res.headers['watchlistid']}, portfolioId: ${res.headers['portfolioid']}`);
-        localStorage.setItem('userId', res.headers['userid']);
-        localStorage.setItem('watchlistId', res.headers['watchlistid']);
-        localStorage.setItem('portfolioId', res.headers['portfolioid']);
+        console.log(res.data);
       })
       .catch((error) => {
-        console.log('Login Error:', error.response ? error.response.data : error.message);
+        console.log(error);
       });
   };
 
@@ -33,21 +32,36 @@ const Login = () => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md p-8 space-y-6 bg-white shadow-md rounded-lg">
-        <h2 className="text-2xl font-bold text-center">Log In</h2>
+        <h2 className="text-2xl font-bold text-center">Sign Up</h2>
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            signInHandler();
           }}
           className="space-y-4"
         >
           <div>
-            <label
-              htmlFor="username"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Username
-            </label>
+            <input
+              type="text"
+              id="fullname"
+              name="fullname"
+              placeholder="Enter your full name"
+              onChange={inputHandler}
+              value={data.fullname}
+              className="w-full p-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
+          <div>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Enter your email"
+              onChange={inputHandler}
+              value={data.email}
+              className="w-full p-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
+          <div>
             <input
               type="text"
               id="username"
@@ -59,12 +73,6 @@ const Login = () => {
             />
           </div>
           <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Password
-            </label>
             <input
               type="password"
               id="password"
@@ -77,16 +85,18 @@ const Login = () => {
           </div>
           <button
             type="submit"
+            onClick={signUpHandler}
             className="w-full py-2 text-white bg-blue-500 rounded-md hover:bg-blue-700"
           >
-            Log In
+            Sign Up
           </button>
         </form>
         <div className="text-center">
           <p className="text-sm text-gray-600">
-            Not an existing user?
+            Already have an account ?
             <button className="font-medium text-blue-600 hover:text-blue-800 focus:outline-none">
-              <Link to="/signup">Sign Up</Link>
+              {" "}
+              <Link to="/login">Log In</Link>{" "}
             </button>
           </p>
         </div>
@@ -95,4 +105,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default SignUp;

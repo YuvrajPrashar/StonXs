@@ -110,24 +110,10 @@ public class UserService {
                 return "User not found";
             }
             if(user.getPassword().equals(userDTO.getPassword())){
-                Cookie userIdCookie = new Cookie("userId", user.getUserId().toString());
-                userIdCookie.setMaxAge(60*60*24);
-                userIdCookie.setPath("/");
-                userIdCookie.setHttpOnly(true);
+                response.addHeader("userId", user.getUserId().toString());
+                response.addHeader("watchlistId", user.getWatchlist().getWatchlistId().toString());
+                response.addHeader("portfolioId", user.getPortfolio().getPortfolioId().toString());
 
-                Cookie watchlistIdCookie = new Cookie("watchlistId", user.getWatchlist().getWatchlistId().toString());
-                watchlistIdCookie.setMaxAge(60*60*24);
-                watchlistIdCookie.setHttpOnly(true);
-                watchlistIdCookie.setPath("/");
-
-                Cookie portfolioIdCookie = new Cookie("portfolioId", user.getPortfolio().getPortfolioId().toString());
-                portfolioIdCookie.setMaxAge(60*60*24);
-                portfolioIdCookie.setHttpOnly(true);
-                portfolioIdCookie.setPath("/");
-
-                response.addCookie(userIdCookie);
-                response.addCookie(watchlistIdCookie);
-                response.addCookie(portfolioIdCookie);
                 return "Login successful";
             }
             return "Login failed here ";
