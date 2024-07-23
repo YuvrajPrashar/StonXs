@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -50,30 +51,34 @@ public class TransactionService {
             float price = transactionDTO.getPrice();
 
             Transactions transaction = new Transactions();
+            transaction.setUser(user);
             transaction.setPortfolio(portfolio);
             transaction.setStock(stock);
             transaction.setQuantity(quantity);
             transaction.setPrice(price);
             transaction.setTransactionType(transactiontype);
-            transaction.setStatus("Completed");
+            transaction.setStatus("Progress");
 
             if (transactiontype.equals("buy")) {
                 if (portfolio.getBalance() < quantity * price) {
                     transaction.setStatus("Cancelled");
+                    transactionRepo.save(transaction);
                     return "Insufficient balance";
                 }
                 portfolio.getStock().add(stock);
                 portfolio.setBalance((int) (portfolio.getBalance() - quantity * price));
-                portfolio.setTotalvalue(portfolio.getTotalvalue() + (int) (quantity * price));
+                portfolio.setInvestedValue(portfolio.getInvestedValue() + (int) (quantity * price));
                 portfolioRepo.save(portfolio);
+                transaction.setStatus("Completed");
                 transactionRepo.save(transaction);
                 stock.setMarketCap(stock.getMarketCap().subtract(new BigInteger(String.valueOf(quantity))));
                 return "Transaction successful";
             } else if (transactiontype.equals("sell")) {
                 portfolio.getStock().remove(stock);
                 portfolio.setBalance((int) (portfolio.getBalance() + quantity * price));
-                portfolio.setTotalvalue(portfolio.getTotalvalue() - (int) (quantity * price));
+                portfolio.setInvestedValue(portfolio.getInvestedValue()- (int) (quantity * price));
                 portfolioRepo.save(portfolio);
+                transaction.setStatus("Completed");
                 transactionRepo.save(transaction);
                 stock.setMarketCap(stock.getMarketCap().add(new BigInteger(String.valueOf(quantity))));
                 return "Transaction successful";
@@ -102,14 +107,15 @@ public class TransactionService {
         }
     }
 
-    public TransactionDTO getTransactionByUserId(UUID userid) {
+    public List<TransactionDTO> getTransactionByUserId(UUID userid) {
         try {
             User user = userRepo.findById(userid).orElse(null);
             if (user == null) {
                 return null;
             }
-            Portfolio portfolio = user.getPortfolio();
-            return mapperUtil.mapTransactionToTransactionDTO(portfolio.getTransactions());
+
+            return mapperUtil.mapTransactionsListToTransactionsDTOList(transactionRepo.findAllByUser(user));
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

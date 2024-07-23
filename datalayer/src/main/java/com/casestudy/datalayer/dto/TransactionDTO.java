@@ -23,6 +23,6 @@ public class TransactionDTO {
     private float price;
     @JsonProperty("status")
     private String status;
-
-    
+    @JsonProperty("stock")
+    private Stock stock;
 }

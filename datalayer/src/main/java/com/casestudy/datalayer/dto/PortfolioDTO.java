@@ -13,8 +13,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PortfolioDTO {
-    @JsonProperty("totalvalue")
-    private int totalvalue;
+    @JsonProperty("investedvalue")
+    private int investedvalue;
     @JsonProperty("profit")
     private int profit;
     @JsonProperty("loss")

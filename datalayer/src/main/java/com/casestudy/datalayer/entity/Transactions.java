@@ -31,4 +31,12 @@ public class Transactions {
     private float price;
     private boolean isDeleted=false;
     private String status;
+
+    public Transactions(Long quantity, String transactionType, float price, String status, Stock stock) {
+        this.quantity = quantity;
+        this.transactionType = transactionType;
+        this.price = price;
+        this.status = status;
+        this.stock = stock;
+    }
 }

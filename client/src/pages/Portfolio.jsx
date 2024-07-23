@@ -9,6 +9,7 @@ const Portfolio = () => {
 
   useEffect(() => {
     axios.get(`http://localhost:8080/portfolio/${portfolioId}`).then((res) => {
+      console.log(res.data);
       setData(res.data);
     });
   }, []);

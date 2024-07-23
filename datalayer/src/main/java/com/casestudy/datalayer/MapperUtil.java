@@ -43,10 +43,10 @@ public class MapperUtil {
         return stockList.stream().map(this::mapStockToStockDto).toList();
     }
     public PortfolioDTO mapPortfolioToPortfolioDTO(Portfolio portfolio){
-        return new PortfolioDTO(portfolio.getProfit(), portfolio.getLoss(), portfolio.getTotalvalue(), mapStockListToStockDTOList(portfolio.getStock().isEmpty() ? Collections.emptyList() : portfolio.getStock()), portfolio.getBalance());
+        return new PortfolioDTO(portfolio.getProfit(), portfolio.getLoss(), portfolio.getInvestedValue(), mapStockListToStockDTOList(portfolio.getStock().isEmpty() ? Collections.emptyList() : portfolio.getStock()), portfolio.getBalance());
     }
     public Portfolio mapPortfolioDtoToPortfolio(PortfolioDTO portfolioDTO){
-        return new Portfolio( portfolioDTO.getBalance() , portfolioDTO.getTotalvalue(), portfolioDTO.getProfit(), portfolioDTO.getLoss(), mapStockDTOListToStockList(portfolioDTO.getStocks()));
+        return new Portfolio( portfolioDTO.getBalance() , portfolioDTO.getInvestedvalue(), portfolioDTO.getProfit(), portfolioDTO.getLoss(), mapStockDTOListToStockList(portfolioDTO.getStocks()));
     }
     public List<PortfolioDTO> mapPortfolioListToPortfolioDTOList(List<Portfolio> portfolioList){
         return portfolioList.stream().map(this::mapPortfolioToPortfolioDTO).toList();
@@ -67,5 +67,20 @@ public class MapperUtil {
         return watchlistDTOList.stream().map(this::mapWatchlistDtoToWatchlist).toList();
     }
 
+    public TransactionDTO mapTransactionsToTransactionsDTO(Transactions transactions){
+        return new TransactionDTO(transactions.getQuantity(),transactions.getTransactionType(), transactions.getPrice(), transactions.getStatus(),transactions.getStock());
+    }
+
+    public Transactions mapTransactionsDtoToTransactions(TransactionDTO transactionDTO){
+        return new Transactions(transactionDTO.getQuantity(), transactionDTO.getTransactionType(), transactionDTO.getPrice(), transactionDTO.getStatus() , transactionDTO.getStock());
+    }
+
+    public List<Transactions> mapTransactionsDTOListToTransactionsList(List<TransactionDTO> transactionDTOList){
+        return transactionDTOList.stream().map(this::mapTransactionsDtoToTransactions).toList();
+    }
+
+    public List<TransactionDTO> mapTransactionsListToTransactionsDTOList(List<Transactions> transactionsList){
+        return transactionsList.stream().map(this::mapTransactionsToTransactionsDTO).toList();
+    }
 
 }

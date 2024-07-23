@@ -5,6 +5,7 @@ import com.casestudy.datalayer.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -31,7 +32,7 @@ public class TransactionController {
     }
 
     @GetMapping("/transactions/{userid}")
-    public TransactionDTO getTransactionByUserId(@PathVariable("userid") UUID userid) {
+    public List<TransactionDTO> getTransactionByUserId(@PathVariable("userid") UUID userid) {
         try {
             return transactionService.getTransactionByUserId(userid);
         } catch (Exception e) {
