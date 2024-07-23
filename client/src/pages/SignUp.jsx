@@ -12,7 +12,7 @@ const SignUp = () => {
 
   const signUpHandler = () => {
     axios
-      .post("http://localhost:8080/user", data)
+      .post("http://localhost:8080/signup", data)
       .then((res) => {
         console.log(res.data);
       })
