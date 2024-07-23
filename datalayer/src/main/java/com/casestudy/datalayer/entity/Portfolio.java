@@ -37,11 +37,11 @@ public class Portfolio {
     private int balance;
     private boolean isDeleted = false;
 
-    public Portfolio(int balance, int investedValue, int profit, int loss, List<Stock> stocks) {
-        this.balance = balance;
-        this.investedValue = investedValue;
+    public Portfolio(int investedvalue, int profit, int loss, List<Stock> stocks, int balance) {
+        this.investedValue = investedvalue;
         this.profit = profit;
         this.loss = loss;
         this.stock = stocks;
+        this.balance = balance;
     }
 }
