@@ -65,15 +65,29 @@ public class TransactionService {
                     transactionRepo.save(transaction);
                     return "Insufficient balance";
                 }
+
+                portfolio.addOrUpdateStock(stock, (int) quantity);
+
                 portfolio.getStock().add(stock);
                 portfolio.setBalance((int) (portfolio.getBalance() - quantity * price));
                 portfolio.setInvestedValue(portfolio.getInvestedValue() + (int) (quantity * price));
+
                 portfolioRepo.save(portfolio);
+
+
                 transaction.setStatus("Completed");
                 transactionRepo.save(transaction);
                 stock.setMarketCap(stock.getMarketCap().subtract(new BigInteger(String.valueOf(quantity))));
                 return "Transaction successful";
             } else if (transactiontype.equals("sell")) {
+                if (!portfolio.getStock().contains(stock) || portfolio.getStock().get(portfolio.getStock().indexOf(stock)).getMarketCap().compareTo(new BigInteger(String.valueOf(quantity))) < 0
+                        || portfolio.getStocksAndQuantity().get(stock) < quantity
+                ) {
+                    transaction.setStatus("Cancelled");
+                    transactionRepo.save(transaction);
+                    return "Insufficient stock";
+                }
+                portfolio.addOrUpdateStock(stock, (int) -quantity);
                 portfolio.getStock().remove(stock);
                 portfolio.setBalance((int) (portfolio.getBalance() + quantity * price));
                 portfolio.setInvestedValue(portfolio.getInvestedValue()- (int) (quantity * price));
