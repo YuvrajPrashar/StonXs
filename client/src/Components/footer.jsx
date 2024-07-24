@@ -50,8 +50,8 @@ const Footer = () => {
         </div>
         <div className="flex justify-end w-full md:w-1/4 mb-4 md:mb-0 ">
           <div>
-            <h3 className=" text-end text-xl font-bold mb-2">More</h3>
-            <ul className=" text-end space-y-2">
+            <h3 className=" text-start text-xl font-bold mb-2">More</h3>
+            <ul className=" text-start space-y-2">
               <li className="hover:text-gray-400 cursor-pointer">Blog</li>
               <li className="hover:text-gray-400 cursor-pointer">Contact</li>
               <li className="hover:text-gray-400 cursor-pointer">
