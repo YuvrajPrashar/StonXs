@@ -19,18 +19,21 @@ const TradeForm = ({ stockData }) => {
       transactiontype: activeButton,
       status: "pending",
     };
-    axios
-      .post(`http://localhost:8080/user/${userId}/stock/${stockId}`, data)
-      .then((res) => {
-        setShowModal(true);
-        setModalMessage(res.data);
-        console.log(res);
-      })
-      .catch((err) => {
-        setShowModal(true);
-        setModalMessage(err.response.data);
-        console.log(err);
-      });
+    userId
+      ? axios
+          .post(`http://localhost:8080/user/${userId}/stock/${stockId}`, data)
+          .then((res) => {
+            setShowModal(true);
+            setModalMessage(res.data);
+            console.log(res);
+          })
+          .catch((err) => {
+            setShowModal(true);
+            setModalMessage(err.response.data);
+            console.log(err);
+          })
+      : setShowModal(true);
+    setModalMessage("Please login to trade");
   };
 
   const handleClick = (button) => {

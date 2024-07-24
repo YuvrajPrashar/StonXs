@@ -9,18 +9,21 @@ const StockInfo = (props) => {
 
   const watchListHandler = () => {
     const watchlistId = localStorage.getItem("watchlistId");
-    axios
-      .patch(
-        `http://localhost:8080/stock/${props.stockData.stockid}/watchlist/${watchlistId}`
-      )
-      .then((res) => {
-        setModalMessage(res.data);
-        setShowModal(true);
-      })
-      .catch((error) => {
-        setModalMessage(error.response.data);
-        setShowModal(true);
-      });
+    watchlistId
+      ? axios
+          .patch(
+            `http://localhost:8080/stock/${props.stockData.stockid}/watchlist/${watchlistId}`
+          )
+          .then((res) => {
+            setModalMessage(res.data);
+            setShowModal(true);
+          })
+          .catch((error) => {
+            setModalMessage(error.response.data);
+            setShowModal(true);
+          })
+      : setModalMessage("Please login to add to watchlist");
+    setShowModal(true);
   };
 
   return (
