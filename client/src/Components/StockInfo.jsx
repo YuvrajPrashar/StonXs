@@ -1,7 +1,12 @@
+import { useState } from "react";
 import { AddCircleOutline } from "@mui/icons-material";
 import axios from "axios";
+import Modal from "./Modal";
 
 const StockInfo = (props) => {
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+
   const watchListHandler = () => {
     const watchlistId = localStorage.getItem("watchlistId");
     axios
@@ -9,16 +14,19 @@ const StockInfo = (props) => {
         `http://localhost:8080/stock/${props.stockData.stockid}/watchlist/${watchlistId}`
       )
       .then((res) => {
-        console.log(res);
+        setModalMessage(res.data);
+        setShowModal(true);
       })
       .catch((error) => {
-        console.log(error);
+        setModalMessage(error.response.data);
+        setShowModal(true);
       });
   };
+
   return (
-    <div className="bg-white shadow-md border-2  hover:shadow-lg rounded-3xl p-6 transition-shadow duration-300 ease-in-out my-4">
+    <div className="bg-white shadow-md border-2 hover:shadow-lg rounded-3xl p-6 transition-shadow duration-300 ease-in-out my-4">
       <div className="grid grid-cols-3 gap-5 p-3">
-        <div className="col-span-2 font-bold text-2xl text-blue-600 ">
+        <div className="col-span-2 font-bold text-2xl text-blue-600">
           {props.stockData?.stocksymbol}
         </div>
         <div className="justify-self-end">
@@ -34,6 +42,9 @@ const StockInfo = (props) => {
           ${props.stockData?.currentprice}
         </div>
       </div>
+      {showModal && (
+        <Modal message={modalMessage} onClose={() => setShowModal(false)} />
+      )}
     </div>
   );
 };
