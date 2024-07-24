@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import ReactDOM from "react-dom";
 
-const Modal = ({ message, onClose, timeout = 2500 }) => {
+const Modal = ({ message, onClose, timeout = 2000 }) => {
   useEffect(() => {
     const timer = setTimeout(onClose, timeout);
     return () => clearTimeout(timer);

@@ -17,7 +17,14 @@ const Portfolio = () => {
     <div className="h-screen">
       <div className="flex h-full ">
         {data && <Holdings holdings={data.stocks} />}
-        {data && <Report PNL={data.profit} InvestedValue={data.investedvalue} CurrentValue={data.totalvalue} Balance={data.balance} />}
+        {data && (
+          <Report
+            PNL={data.pnl}
+            InvestedValue={data.investedvalue}
+            CurrentValue={data.currentValue}
+            Balance={data.balance}
+          />
+        )}
       </div>
     </div>
   );
