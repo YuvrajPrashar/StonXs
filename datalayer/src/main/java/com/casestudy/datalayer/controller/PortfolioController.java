@@ -26,7 +26,7 @@ class  PortfolioController {
     @GetMapping("/portfolio/{id}")
     public PortfolioDTO getPortfolio(@PathVariable("id") UUID id) {
         try {
-            return portfolioService.getPortfolio(id);
+            return portfolioService.getPortfolioByPortfolioId(id);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

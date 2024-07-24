@@ -43,11 +43,13 @@ public class MapperUtil {
         return stockList.stream().map(this::mapStockToStockDto).toList();
     }
     public PortfolioDTO mapPortfolioToPortfolioDTO(Portfolio portfolio){
-        return new PortfolioDTO(portfolio.getInvestedValue(), portfolio.getProfit(), portfolio.getLoss(), mapStockListToStockDTOList(portfolio.getStock().isEmpty() ? Collections.emptyList() : portfolio.getStock()), portfolio.getBalance());
+        return new PortfolioDTO(portfolio.getInvestedValue(),portfolio.getBalance());
     }
     public Portfolio mapPortfolioDtoToPortfolio(PortfolioDTO portfolioDTO){
-        return new Portfolio( portfolioDTO.getInvestedvalue(), portfolioDTO.getProfit(), portfolioDTO.getLoss(), mapStockDTOListToStockList(portfolioDTO.getStocks()),portfolioDTO.getBalance() );
+        return new Portfolio(portfolioDTO.getInvestedvalue(),portfolioDTO.getBalance());
     }
+
+
     public List<PortfolioDTO> mapPortfolioListToPortfolioDTOList(List<Portfolio> portfolioList){
         return portfolioList.stream().map(this::mapPortfolioToPortfolioDTO).toList();
     }

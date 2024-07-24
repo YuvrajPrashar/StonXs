@@ -2,14 +2,8 @@ package com.casestudy.datalayer.service;
 
 import com.casestudy.datalayer.MapperUtil;
 import com.casestudy.datalayer.dto.TransactionDTO;
-import com.casestudy.datalayer.entity.Portfolio;
-import com.casestudy.datalayer.entity.Stock;
-import com.casestudy.datalayer.entity.Transactions;
-import com.casestudy.datalayer.entity.User;
-import com.casestudy.datalayer.repositary.PortfolioRepo;
-import com.casestudy.datalayer.repositary.StocksRepo;
-import com.casestudy.datalayer.repositary.TransactionRepo;
-import com.casestudy.datalayer.repositary.UserRepo;
+import com.casestudy.datalayer.entity.*;
+import com.casestudy.datalayer.repositary.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,8 +28,10 @@ public class TransactionService {
     @Autowired
     private MapperUtil mapperUtil;
 
-    public String getTransactionByUserIdAndStockId(UUID userid, UUID stockid, TransactionDTO transactionDTO) {
+    @Autowired
+    private HoldingsRepo holdingsRepo;
 
+    public String getTransactionByUserIdAndStockId(UUID userid, UUID stockid, TransactionDTO transactionDTO) {
         try {
             User user = userRepo.findById(userid).orElse(null);
             Stock stock = stockRepo.findById(stockid).orElse(null);
@@ -45,9 +41,8 @@ public class TransactionService {
             }
 
             Portfolio portfolio = user.getPortfolio();
-
             long quantity = transactionDTO.getQuantity();
-            String transactiontype = transactionDTO.getTransactionType();
+            String transactionType = transactionDTO.getTransactionType();
             float price = transactionDTO.getPrice();
 
             Transactions transaction = new Transactions();
@@ -56,55 +51,85 @@ public class TransactionService {
             transaction.setStock(stock);
             transaction.setQuantity(quantity);
             transaction.setPrice(price);
-            transaction.setTransactionType(transactiontype);
+            transaction.setTransactionType(transactionType);
             transaction.setStatus("Progress");
 
-            if (transactiontype.equals("buy")) {
+            if (transactionType.equals("buy")) {
                 if (portfolio.getBalance() < quantity * price) {
                     transaction.setStatus("Cancelled");
                     transactionRepo.save(transaction);
                     return "Insufficient balance";
                 }
 
-                portfolio.addOrUpdateStock(stock, (int) quantity);
+                List<Holdings> holdings = holdingsRepo.findByPortfolio(portfolio);
+                Holdings holdingToUpdate = null;
 
-                portfolio.getStock().add(stock);
+                if (holdings != null) {
+                    for (Holdings holding : holdings) {
+                        if (holding.getStocks().getStockId().equals(stock.getStockId())) {
+                            holdingToUpdate = holding;
+                            break;
+                        }
+                    }
+                }
+
+                if (holdingToUpdate == null) {
+                    Holdings newHolding = new Holdings();
+                    newHolding.setPortfolio(portfolio);
+                    newHolding.setStocks(stock);
+                    newHolding.setQuantity((int) quantity);
+                    holdingsRepo.save(newHolding);
+                } else {
+                    holdingToUpdate.setQuantity(holdingToUpdate.getQuantity() + (int) quantity);
+                    holdingsRepo.save(holdingToUpdate);
+                }
+
                 portfolio.setBalance((int) (portfolio.getBalance() - quantity * price));
-                portfolio.setInvestedValue(portfolio.getInvestedValue() + (int) (quantity * price));
-
+                portfolio.setInvestedValue((int) (portfolio.getInvestedValue() + quantity * price));
                 portfolioRepo.save(portfolio);
-
 
                 transaction.setStatus("Completed");
                 transactionRepo.save(transaction);
                 stock.setMarketCap(stock.getMarketCap().subtract(new BigInteger(String.valueOf(quantity))));
+                stockRepo.save(stock);
                 return "Transaction successful";
-            } else if (transactiontype.equals("sell")) {
-                if (!portfolio.getStock().contains(stock) || portfolio.getStock().get(portfolio.getStock().indexOf(stock)).getMarketCap().compareTo(new BigInteger(String.valueOf(quantity))) < 0
-                        || portfolio.getStocksAndQuantity().get(stock) < quantity
-                ) {
+            } else if (transactionType.equals("sell")) {
+                List<Holdings> holdings = holdingsRepo.findByPortfolio(portfolio);
+                Holdings holdingToUpdate = null;
+
+                if (holdings != null) {
+                    for (Holdings holding : holdings) {
+                        if (holding.getStocks().getStockId().equals(stock.getStockId())) {
+                            holdingToUpdate = holding;
+                            break;
+                        }
+                    }
+                }
+
+                if (holdingToUpdate == null || holdingToUpdate.getQuantity() < quantity) {
                     transaction.setStatus("Cancelled");
                     transactionRepo.save(transaction);
-                    return "Insufficient stock";
+                    return "Insufficient holdings";
                 }
-                portfolio.addOrUpdateStock(stock, (int) -quantity);
-                portfolio.getStock().remove(stock);
+
+                holdingToUpdate.setQuantity(holdingToUpdate.getQuantity() - (int) quantity);
+                holdingsRepo.save(holdingToUpdate);
+
                 portfolio.setBalance((int) (portfolio.getBalance() + quantity * price));
-                portfolio.setInvestedValue(portfolio.getInvestedValue()- (int) (quantity * price));
+                portfolio.setInvestedValue((int) (portfolio.getInvestedValue() - quantity * price));
                 portfolioRepo.save(portfolio);
+
                 transaction.setStatus("Completed");
                 transactionRepo.save(transaction);
                 stock.setMarketCap(stock.getMarketCap().add(new BigInteger(String.valueOf(quantity))));
+                stockRepo.save(stock);
                 return "Transaction successful";
-            }
-
-            else {
+            } else {
                 return "Invalid transaction type";
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
     }
 
     public String deleteTransaction(UUID id) {
