@@ -1,5 +1,4 @@
 package com.casestudy.datalayer.repositary;
-
 import com.casestudy.datalayer.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 

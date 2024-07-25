@@ -5,6 +5,9 @@ import com.casestudy.datalayer.dto.StockDTO;
 import com.casestudy.datalayer.entity.Stock;
 import com.casestudy.datalayer.repositary.StocksRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -79,6 +82,16 @@ public class StockService {
         try {
             System.out.println(stocksRepo.findAllByCategory(category))    ;
             return mapperUtil.mapStockListToStockDTOList(stocksRepo.findAllByCategory(category));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<StockDTO> getStocksByPages(int pageNo, int pageSize) {
+        try {
+            PageRequest pageRequest = PageRequest.of(pageNo, pageSize, Sort.by("stockName").ascending());
+            Page<Stock> stockPage = stocksRepo.findAll(pageRequest);
+            return mapperUtil.mapStockListToStockDTOList(stockPage.getContent());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

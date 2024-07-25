@@ -38,6 +38,18 @@ public class StockController {
             throw new RuntimeException(e);
         }
     }
+
+    @GetMapping("stocks/page")
+    public List<StockDTO> getStocksByPage(@RequestParam(defaultValue = "0") int pageNo, @RequestParam(defaultValue = "15") int pageSize){
+        try {
+            return stockService.getStocksByPages(pageNo, pageSize);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+
     @GetMapping("/stocks/{category}")
     public List<StockDTO> getStocksByCategory(@PathVariable String category){
         try {
