@@ -5,30 +5,39 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { FormatListBulleted, WindowSharp } from "@mui/icons-material";
 import { useParams } from "react-router-dom";
+import Pagination from "../Components/Pagination.jsx";
 
 const AllStocks = () => {
   const { category } = useParams();
   const [stocksDATA, setStocksDATA] = useState([]);
   const [sortedStocks, setSortedStocks] = useState([]);
   const [grid, setGrid] = useState(true);
-  const [sortOption, setSortOption] = useState("price");
+  const [sortOption, setSortOption] = useState();
+  const [currentPage, setCurrentPage] = useState(0);
+  const [pageSize, setPageSize] = useState(15);
+  const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
     const fetchStocks = async () => {
       try {
         const response = category
-          ? await axios.get(`http://localhost:8080/stocks/${category}`)
-          : await axios.get("http://localhost:8080/stocks");
-
-        setStocksDATA(response.data);
-        setSortedStocks(response.data);
+          ? await axios.get(
+              `http://localhost:8080/stocks/${category}?pageNo=${currentPage}&pageSize=${pageSize}`
+            )
+          : await axios.get(
+              `http://localhost:8080/stocks?pageNo=${currentPage}&pageSize=${pageSize}`
+            );
+        console.log(response);
+        setStocksDATA(response.data.content);
+        setSortedStocks(response.data.content);
+        setTotalPages(response.data.totalPages);
       } catch (error) {
         console.error("Error fetching stocks:", error);
       }
     };
 
     fetchStocks();
-  }, [category]);
+  }, [category, currentPage, pageSize]);
 
   useEffect(() => {
     let sortedData = [...stocksDATA];
@@ -66,6 +75,9 @@ const AllStocks = () => {
               setSortOption(e.target.value);
             }}
           >
+            <option value="" hidden>
+              None
+            </option>
             <option value="price">Price</option>
             <option value="alphabets">A-Z</option>
             <option value="reverseAlphabets">Z-A</option>
@@ -98,6 +110,11 @@ const AllStocks = () => {
           <Stockstable stocks={sortedStocks} />
         </div>
       )}
+      <Pagination
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        totalPages={totalPages}
+      />
     </>
   );
 };

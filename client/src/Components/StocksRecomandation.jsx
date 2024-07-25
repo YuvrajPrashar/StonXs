@@ -9,9 +9,11 @@ const StocksRecomandation = () => {
   const [stocksDATA, setStocksDATA] = useState([]);
   const navigate = useNavigate();
   useEffect(() => {
-    axios.get("http://localhost:8080/stocks").then((res) => {
-      setStocksDATA(res.data);
-    });
+    axios
+      .get("http://localhost:8080/stocks?pageNo=2&pageSize=7")
+      .then((res) => {
+        setStocksDATA(res.data.content);
+      });
   }, []);
   const stockHandler = () => {
     navigate("/stocks");
@@ -20,7 +22,7 @@ const StocksRecomandation = () => {
     <>
       <div className="font-thin text-3xl ">Stocks</div>
       <div className="flex flex-nowrap flex-row space-x-12 overflow-scroll m-2 p-2">
-        {stocksDATA.slice(0, 6).map((stockElm) => {
+        {stocksDATA.map((stockElm) => {
           return (
             <StocksCard
               key={stockElm.stockid}

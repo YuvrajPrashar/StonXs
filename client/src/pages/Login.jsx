@@ -22,7 +22,6 @@ const Login = () => {
         localStorage.setItem("portfolioId", res.headers["portfolioid"]);
         navigate("/");
         window.location.reload();
-        modalMessage(res.data);
       })
       .catch((error) => {
         console.log(
