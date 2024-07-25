@@ -4,6 +4,7 @@ import com.casestudy.datalayer.MapperUtil;
 import com.casestudy.datalayer.dto.StockDTO;
 import com.casestudy.datalayer.entity.Stock;
 import com.casestudy.datalayer.repositary.StocksRepo;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -78,20 +79,22 @@ public class StockService {
     }
 
 
-    public List<StockDTO> getStocksByCategory(String category) {
+    public Page<StockDTO> getStocksByCategory(String category , int pageNo, int pageSize) {
         try {
             System.out.println(stocksRepo.findAllByCategory(category))    ;
-            return mapperUtil.mapStockListToStockDTOList(stocksRepo.findAllByCategory(category));
+            PageRequest pageRequest = PageRequest.of(pageNo, pageSize, Sort.by("stockName").ascending());
+            Page<StockDTO> stockPage = stocksRepo.findAllByCategory(category, pageRequest).map(stock -> mapperUtil.mapStockToStockDto(stock));
+            return stockPage;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    public List<StockDTO> getStocksByPages(int pageNo, int pageSize) {
+    public Page<StockDTO> getStocksByPages(int pageNo, int pageSize ) {
         try {
             PageRequest pageRequest = PageRequest.of(pageNo, pageSize, Sort.by("stockName").ascending());
-            Page<Stock> stockPage = stocksRepo.findAll(pageRequest);
-            return mapperUtil.mapStockListToStockDTOList(stockPage.getContent());
+            Page<StockDTO> stockPage = stocksRepo.findAll(pageRequest).map(stock -> mapperUtil.mapStockToStockDto(stock));
+            return stockPage;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

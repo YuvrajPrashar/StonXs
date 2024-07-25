@@ -3,6 +3,7 @@ package com.casestudy.datalayer.controller;
 import com.casestudy.datalayer.dto.StockDTO;
 import com.casestudy.datalayer.service.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,17 +31,17 @@ public class StockController {
             throw new RuntimeException(e);
         }
     }
-    @GetMapping("/stocks")
-    public List<StockDTO> getAllStocks(){
-        try {
-            return stockService.getAllStocks();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+//    @GetMapping("/stocks")
+//    public List<StockDTO> getAllStocks(){
+//        try {
+//            return stockService.getAllStocks();
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 
-    @GetMapping("stocks/page")
-    public List<StockDTO> getStocksByPage(@RequestParam(defaultValue = "0") int pageNo, @RequestParam(defaultValue = "15") int pageSize){
+    @GetMapping("stocks")
+    public Page<StockDTO> getStocksByPage(@RequestParam(defaultValue = "0") int pageNo, @RequestParam(defaultValue = "15") int pageSize){
         try {
             return stockService.getStocksByPages(pageNo, pageSize);
         } catch (Exception e) {
@@ -51,9 +52,9 @@ public class StockController {
 
 
     @GetMapping("/stocks/{category}")
-    public List<StockDTO> getStocksByCategory(@PathVariable String category){
+    public Page<StockDTO> getStocksByCategory(@PathVariable String category ,@RequestParam(defaultValue = "0") int pageNo, @RequestParam(defaultValue = "15") int pageSize){
         try {
-            return stockService.getStocksByCategory(category);
+            return stockService.getStocksByCategory(category,pageNo,pageSize);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
