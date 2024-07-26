@@ -6,9 +6,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 public interface StocksRepo extends JpaRepository<Stock, UUID>   {
@@ -17,5 +18,10 @@ public interface StocksRepo extends JpaRepository<Stock, UUID>   {
     Page<Stock> findAll(Pageable pageable);
 
     Page<Stock> findAllByCategory(String category, Pageable pageable);
+
+    @Query(value = "SELECT * FROM practice.stock s WHERE s.stock_symbol ILIKE %:searchString% OR s.stock_name ILIKE %:searchString% OR s.sector ILIKE %:searchString%", nativeQuery = true)
+    List<Stock> findBySearch(@Param("searchString") String searchString);
+
+
 
 }

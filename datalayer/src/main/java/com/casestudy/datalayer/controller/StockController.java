@@ -14,32 +14,6 @@ public class StockController {
     @Autowired
     StockService stockService;
 
-    @PostMapping("/stock")
-    public String createStock(@RequestBody StockDTO stockDto){
-        try {
-            return stockService.createStock(stockDto);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @GetMapping("/stock/{id}")
-    public StockDTO getStock(@PathVariable("id") UUID id){
-        try {
-            return stockService.getStock(id);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-//    @GetMapping("/stocks")
-//    public List<StockDTO> getAllStocks(){
-//        try {
-//            return stockService.getAllStocks();
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-
     @GetMapping("stocks")
     public Page<StockDTO> getStocksByPage(@RequestParam(defaultValue = "0") int pageNo, @RequestParam(defaultValue = "15") int pageSize){
         try {
@@ -49,8 +23,6 @@ public class StockController {
         }
     }
 
-
-
     @GetMapping("/stocks/{category}")
     public Page<StockDTO> getStocksByCategory(@PathVariable String category ,@RequestParam(defaultValue = "0") int pageNo, @RequestParam(defaultValue = "15") int pageSize){
         try {
@@ -59,6 +31,28 @@ public class StockController {
             throw new RuntimeException(e);
         }
     }
+
+    @GetMapping("/search")
+    public List<StockDTO> getStocksBySearching(@RequestParam String stockSymbl){
+        try {
+            return stockService.getStocksBySearch(stockSymbl);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    @GetMapping("/stock/{id}")
+    public StockDTO getStock(@PathVariable("id") UUID id){
+        try {
+            return stockService.getStock(id);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+
     @PatchMapping("/stock/{id}")
     public String updateStock(@PathVariable("id") UUID id, @RequestBody StockDTO stockDto){
         try {
@@ -71,6 +65,22 @@ public class StockController {
     public String deleteStock(@PathVariable("id") UUID id){
         try {
             return stockService.deleteStock(id);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    @PostMapping("/stock")
+    public String createStock(@RequestBody StockDTO stockDto){
+        try {
+            return stockService.createStock(stockDto);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    @GetMapping("/all-stocks")
+    public List<StockDTO> getAllStocks(){
+        try {
+            return stockService.getAllStocks();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -99,4 +99,20 @@ public class StockService {
             throw new RuntimeException(e);
         }
     }
+
+    public List<StockDTO> getStocksBySearch(String search) {
+        try {
+//            Stock stock = stocksRepo.findAll().stream().filter(stock1 -> stock1.getStockSymbol().equals(search)
+//                    || stock1.getStockSymbol().equals(search)).findFirst().orElse(null);
+//            if(Objects.isNull(stock)){
+//                return null;
+//            }
+//            return mapperUtil.mapStockToStockDto(stock);
+
+            return  mapperUtil.mapStockListToStockDTOList(stocksRepo.findBySearch(search));
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
