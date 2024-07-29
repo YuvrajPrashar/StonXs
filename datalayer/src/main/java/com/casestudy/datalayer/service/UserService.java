@@ -10,6 +10,8 @@ import com.casestudy.datalayer.repositary.WatchListRepo;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.casestudy.datalayer.dto.UserDTO;
 import java.util.List;
@@ -30,8 +32,11 @@ public class UserService {
     @Autowired
     MapperUtil mapperUtil;
 
+    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
+
     public String createUser(UserDTO userDTO){
         User user = mapperUtil.mapUserDtoToUser(userDTO);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         try {
             Portfolio portfolio = new Portfolio();
             userRepo.save(user);
@@ -46,6 +51,30 @@ public class UserService {
             return "User created successfully";
         } catch (Exception e) {
             return "User creation failed " + e.getMessage();
+        }
+    }
+
+    public String login(UserDTO userDTO, HttpServletResponse response) {
+        try {
+            User user = userRepo.findByUsername(userDTO.getUsername());
+            if (user == null) {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND); // 404 Not Found
+                return "User not found";
+            }
+
+            if (passwordEncoder.matches(userDTO.getPassword(), user.getPassword())) {
+                response.addHeader("userId", user.getUserId().toString());
+                response.addHeader("watchlistId", user.getWatchlist().getWatchlistId().toString());
+                response.addHeader("portfolioId", user.getPortfolio().getPortfolioId().toString());
+                response.setStatus(HttpServletResponse.SC_OK);
+                return "Login Successful";
+            } else {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                return "Invalid Password";
+            }
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return "An error occurred: " + e.getMessage();
         }
     }
 
@@ -103,26 +132,4 @@ public class UserService {
         }
     }
 
-    public String login(UserDTO userDTO, HttpServletResponse response) {
-        try {
-            User user = userRepo.findByUsername(userDTO.getUsername());
-            if (user == null) {
-                response.setStatus(HttpServletResponse.SC_NOT_FOUND); // 404 Not Found
-                return "User not found";
-            }
-            if (user.getPassword().equals(userDTO.getPassword())) {
-                response.addHeader("userId", user.getUserId().toString());
-                response.addHeader("watchlistId", user.getWatchlist().getWatchlistId().toString());
-                response.addHeader("portfolioId", user.getPortfolio().getPortfolioId().toString());
-                response.setStatus(HttpServletResponse.SC_OK);
-                return "Login Successful";
-            } else {
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                return "Invalid Password";
-            }
-        } catch (Exception e) {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            return "An error occurred: " + e.getMessage();
-        }
-    }
 }
