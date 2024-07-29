@@ -19,7 +19,7 @@ public interface StocksRepo extends JpaRepository<Stock, UUID>   {
 
     Page<Stock> findAllByCategory(String category, Pageable pageable);
 
-    @Query(value = "SELECT * FROM practice.stock s WHERE s.stock_symbol ILIKE %:searchString% OR s.stock_name ILIKE %:searchString% OR s.sector ILIKE %:searchString%", nativeQuery = true)
+    @Query(value = "SELECT * FROM practice.stock s WHERE s.stock_symbol ILIKE %:searchString% OR s.stock_name ILIKE %:searchString% ", nativeQuery = true)
     List<Stock> findBySearch(@Param("searchString") String searchString);
 
 

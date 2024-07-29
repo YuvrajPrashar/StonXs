@@ -9,6 +9,7 @@ import Footer from "./Components/footer.jsx";
 import Orders from "./pages/Orders.jsx";
 import Navbar from "./Components/Navbar.jsx";
 import SignUp from "./pages/SignUp.jsx";
+import SearchResults from "./pages/SearchResults.jsx";
 
 const routes = [
   { path: "/", element: <Home /> },
@@ -20,6 +21,7 @@ const routes = [
   { path: "/portfolio", element: <Portfolio /> },
   { path: "/watchlist", element: <WatchList /> },
   { path: "/orders", element: <Orders /> },
+  {path:"/search",element:<SearchResults/>}
 ];
 
 function App() {

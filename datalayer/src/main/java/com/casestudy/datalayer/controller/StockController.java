@@ -33,7 +33,7 @@ public class StockController {
     }
 
     @GetMapping("/search")
-    public List<StockDTO> getStocksBySearching(@RequestParam String stockSymbl){
+    public List<StockDTO> getStocksBySearching(@RequestParam(name = "search") String stockSymbl){
         try {
             return stockService.getStocksBySearch(stockSymbl);
         } catch (Exception e) {
