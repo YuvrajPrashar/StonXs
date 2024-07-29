@@ -17,11 +17,15 @@ const Login = () => {
     axios
       .post("http://localhost:8080/login", data, { withCredentials: true })
       .then((res) => {
+        setModalMessage(res.data);
         localStorage.setItem("userId", res.headers["userid"]);
         localStorage.setItem("watchlistId", res.headers["watchlistid"]);
         localStorage.setItem("portfolioId", res.headers["portfolioid"]);
-        navigate("/");
-        window.location.reload();
+        setShowModal(true);
+        setTimeout(() => {
+          navigate("/");
+          window.location.reload();
+        }, 1700);
       })
       .catch((error) => {
         console.log(

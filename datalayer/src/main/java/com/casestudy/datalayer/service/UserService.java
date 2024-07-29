@@ -103,22 +103,26 @@ public class UserService {
         }
     }
 
-    public String login(UserDTO userDTO , HttpServletResponse response) {
+    public String login(UserDTO userDTO, HttpServletResponse response) {
         try {
             User user = userRepo.findByUsername(userDTO.getUsername());
-            if(user == null){
+            if (user == null) {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND); // 404 Not Found
                 return "User not found";
             }
-            if(user.getPassword().equals(userDTO.getPassword())){
+            if (user.getPassword().equals(userDTO.getPassword())) {
                 response.addHeader("userId", user.getUserId().toString());
                 response.addHeader("watchlistId", user.getWatchlist().getWatchlistId().toString());
                 response.addHeader("portfolioId", user.getPortfolio().getPortfolioId().toString());
-
-                return "Login successful";
+                response.setStatus(HttpServletResponse.SC_OK);
+                return "Login Successful";
+            } else {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                return "Invalid Password";
             }
-            return "Login failed here ";
         } catch (Exception e) {
-            return "Login failed from exception" + e.getMessage();
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return "An error occurred: " + e.getMessage();
         }
     }
 }

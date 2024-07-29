@@ -62,7 +62,7 @@ const AllStocks = () => {
   };
 
   return (
-    <>
+    <div className="h-screen">
       <div className="p-2 grid grid-flow-col w-screen justify-stretch content-center">
         <div className="p-3 justify-self-start">
           <SwapVertIcon />
@@ -89,7 +89,7 @@ const AllStocks = () => {
         </div>
       </div>
       {grid && (
-        <div className="w-5/6 mx-auto my-2 grid grid-cols-5 gap-4">
+        <div className="w-5/6 mx-auto my-2 grid grid-cols-5 gap-4 h-5/6 ">
           {sortedStocks.map((stockElm) => {
             return (
               <StocksCard
@@ -106,7 +106,7 @@ const AllStocks = () => {
       )}
 
       {!grid && (
-        <div className="w-5/6 h-screen shadow-xl mx-auto my-2 overflow-auto">
+        <div className="w-5/6 h-5/6 shadow-xl mx-auto my-2 overflow-auto">
           <Stockstable stocks={sortedStocks} />
         </div>
       )}
@@ -115,7 +115,7 @@ const AllStocks = () => {
         setCurrentPage={setCurrentPage}
         totalPages={totalPages}
       />
-    </>
+    </div>
   );
 };
 

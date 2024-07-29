@@ -29,7 +29,7 @@ const Stockstable = (props) => {
         </tr>
       </thead>
       <tbody>
-        {Stocks ? (
+        {Stocks && Stocks.length > 0 ? (
           Stocks.map((stock) => {
             return (
               <tr
@@ -58,7 +58,7 @@ const Stockstable = (props) => {
               colSpan="5"
               className="text-center text-6xl font-extrabold p-10"
             >
-              No Data Yet
+              No Stocks Available
             </td>
           </tr>
         )}
