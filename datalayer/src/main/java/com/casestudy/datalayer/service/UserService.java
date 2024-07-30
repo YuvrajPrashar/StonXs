@@ -31,6 +31,8 @@ public class UserService {
     WatchListRepo watchListRepo;
     @Autowired
     MapperUtil mapperUtil;
+    @Autowired
+    JwtService jwtService;
 
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
 
@@ -63,6 +65,8 @@ public class UserService {
             }
 
             if (passwordEncoder.matches(userDTO.getPassword(), user.getPassword())) {
+                String token = jwtService.generateToken(user.getUsername());
+                response.addHeader("Authorization", "Bearer " + token);
                 response.addHeader("userId", user.getUserId().toString());
                 response.addHeader("watchlistId", user.getWatchlist().getWatchlistId().toString());
                 response.addHeader("portfolioId", user.getPortfolio().getPortfolioId().toString());
