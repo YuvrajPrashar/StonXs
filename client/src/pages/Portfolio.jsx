@@ -7,11 +7,17 @@ const Portfolio = () => {
 
   const portfolioId = localStorage.getItem("portfolioId");
 
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: { Authorization: `${token}` },
+  };
   useEffect(() => {
-    axios.get(`http://localhost:8080/portfolio/${portfolioId}`).then((res) => {
-      console.log(res.data);
-      setData(res.data);
-    });
+    axios
+      .get(`http://localhost:8080/portfolio/${portfolioId}`, config)
+      .then((res) => {
+        console.log(res.data);
+        setData(res.data);
+      });
   }, []);
   return (
     <div className="h-screen">

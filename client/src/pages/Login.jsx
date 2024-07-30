@@ -18,6 +18,9 @@ const Login = () => {
       .post("http://localhost:8080/login", data, { withCredentials: true })
       .then((res) => {
         setModalMessage(res.data);
+        localStorage.setItem("token", res.headers["authorization"]);
+        console.log(res.headers["authorization"]);
+        console.log(res);
         localStorage.setItem("userId", res.headers["userid"]);
         localStorage.setItem("watchlistId", res.headers["watchlistid"]);
         localStorage.setItem("portfolioId", res.headers["portfolioid"]);

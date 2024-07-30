@@ -3,10 +3,14 @@ import Stockstable from "../Components/Stockstable";
 import axios from "axios";
 const WatchList = () => {
   const [stocksData, setStocks] = useState([]);
+  const token = localStorage.getItem("token");
   const watchlistId = localStorage.getItem("watchlistId");
+  const config = {
+    headers: { Authorization: `${token}` },
+  };
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/watchlist/${watchlistId}`)
+      .get(`http://localhost:8080/watchlist/${watchlistId}`, config)
       .then((res) => {
         setStocks(res.data.stocks);
       })

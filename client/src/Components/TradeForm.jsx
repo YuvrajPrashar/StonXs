@@ -19,21 +19,34 @@ const TradeForm = ({ stockData }) => {
       transactiontype: activeButton,
       status: "pending",
     };
-    userId
-      ? axios
-          .post(`http://localhost:8080/user/${userId}/stock/${stockId}`, data)
-          .then((res) => {
-            setShowModal(true);
-            setModalMessage(res.data);
-            console.log(res);
-          })
-          .catch((err) => {
-            setShowModal(true);
-            setModalMessage(err.response.data);
-            console.log(err);
-          })
-      : setShowModal(true);
-    setModalMessage("Please login to trade");
+
+    const token = localStorage.getItem("token"); // Retrieve token from localStorage
+    console.log(token);
+    const config = {
+      headers: { Authorization: `${token}` },
+    };
+
+    if (userId) {
+      axios
+        .post(
+          `http://localhost:8080/user/${userId}/stock/${stockId}`,
+          data,
+          config
+        )
+        .then((res) => {
+          setShowModal(true);
+          setModalMessage(res.data.message);
+          console.log(res);
+        })
+        .catch((err) => {
+          setShowModal(true);
+          setModalMessage(err.response.data.message);
+          console.log(err);
+        });
+    } else {
+      setShowModal(true);
+      setModalMessage("Please login to trade");
+    }
   };
 
   const handleClick = (button) => {
@@ -51,7 +64,7 @@ const TradeForm = ({ stockData }) => {
         <div className="w-full h-10 gap-3 flex mx-auto my-2">
           <button
             type="button"
-            className={`w-1/2 font-bold rounded-xl  border-2 border-red-500 ${
+            className={`w-1/2 font-bold rounded-xl border-2 border-red-500 ${
               activeButton === "buy"
                 ? "bg-red-500 text-white"
                 : "bg-white text-red-500"
@@ -62,7 +75,7 @@ const TradeForm = ({ stockData }) => {
           </button>
           <button
             type="button"
-            className={`w-1/2 font-bold rounded-xl  border-2 border-green-500 ${
+            className={`w-1/2 font-bold rounded-xl border-2 border-green-500 ${
               activeButton === "sell"
                 ? "bg-green-500 text-white"
                 : "bg-white text-green-500"
