@@ -1,4 +1,4 @@
-package com.casestudy.datalayer;
+package com.casestudy.datalayer.Configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
