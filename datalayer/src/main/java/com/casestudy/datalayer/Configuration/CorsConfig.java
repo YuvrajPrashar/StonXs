@@ -15,7 +15,7 @@ public class CorsConfig {
                 registry.addMapping("/**")
                         .allowedOrigins("http://localhost:5173")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH")
-                        .allowedHeaders("*")
+                        .allowedHeaders("userId ", "watchlistId", "portfolioId","Authorization")
                         .exposedHeaders("userId", "watchlistId", "portfolioId","Authorization")
                         .allowCredentials(true);
             }

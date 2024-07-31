@@ -14,7 +14,7 @@ class  PortfolioController {
     @Autowired
     private PortfolioService portfolioService;
 
-    @GetMapping("/user/{id}/portfolio")
+    @GetMapping("/auth/api-v1/user/{id}/portfolio")
     public PortfolioDTO getPortfolioByUserId(@PathVariable("id") UUID id) {
         try {
             return portfolioService.getPortfolioByUserId(id);
@@ -23,7 +23,7 @@ class  PortfolioController {
         }
     }
 
-    @GetMapping("/portfolio/{id}")
+    @GetMapping("/auth/api-v1/portfolio/{id}")
     public PortfolioDTO getPortfolio(@PathVariable("id") UUID id) {
         try {
             return portfolioService.getPortfolioByPortfolioId(id);

@@ -39,10 +39,10 @@ public class SecurityConfig {
                     try {
                         customizer.disable()
                                 .authorizeHttpRequests(request -> request
-                                        .requestMatchers("login","signup","search","stocks","stock/**","stocks/**")
-                                        .permitAll()
+                                        .requestMatchers("/auth/**")
+                                        .authenticated()
                                         .anyRequest()
-                                        .authenticated())
+                                        .permitAll())
                                 .httpBasic(Customizer.withDefaults())
                                 .sessionManagement(session -> session
                                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))

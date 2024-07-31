@@ -14,7 +14,7 @@ public class StockController {
     @Autowired
     StockService stockService;
 
-    @GetMapping("stocks")
+    @GetMapping("/api-v1/stocks")
     public Page<StockDTO> getStocksByPage(@RequestParam(defaultValue = "0") int pageNo, @RequestParam(defaultValue = "15") int pageSize){
         try {
             return stockService.getStocksByPages(pageNo, pageSize);
@@ -23,7 +23,7 @@ public class StockController {
         }
     }
 
-    @GetMapping("/stocks/{category}")
+    @GetMapping("/api-v1/stocks/{category}")
     public Page<StockDTO> getStocksByCategory(@PathVariable String category ,@RequestParam(defaultValue = "0") int pageNo, @RequestParam(defaultValue = "15") int pageSize){
         try {
             return stockService.getStocksByCategory(category,pageNo,pageSize);
@@ -32,7 +32,7 @@ public class StockController {
         }
     }
 
-    @GetMapping("/search")
+    @GetMapping("/auth/api-v1")
     public List<StockDTO> getStocksBySearching(@RequestParam(name = "search") String stockSymbl){
         try {
             return stockService.getStocksBySearch(stockSymbl);
@@ -42,7 +42,7 @@ public class StockController {
     }
 
 
-    @GetMapping("/stock/{id}")
+    @GetMapping("/api-v1/stock/{id}")
     public StockDTO getStock(@PathVariable("id") UUID id){
         try {
             return stockService.getStock(id);
@@ -53,7 +53,7 @@ public class StockController {
 
 
 
-    @PatchMapping("/stock/{id}")
+    @PatchMapping("/auth/api-v1/stock/{id}")
     public String updateStock(@PathVariable("id") UUID id, @RequestBody StockDTO stockDto){
         try {
             return stockService.updateStock(id,stockDto);
@@ -61,7 +61,7 @@ public class StockController {
             throw new RuntimeException(e);
         }
     }
-    @DeleteMapping("/stock/{id}")
+    @DeleteMapping("/auth/api-v1/stock/{id}")
     public String deleteStock(@PathVariable("id") UUID id){
         try {
             return stockService.deleteStock(id);
@@ -69,7 +69,7 @@ public class StockController {
             throw new RuntimeException(e);
         }
     }
-    @PostMapping("/stock")
+    @PostMapping("/auth/api-v1/stock")
     public String createStock(@RequestBody StockDTO stockDto){
         try {
             return stockService.createStock(stockDto);
@@ -77,7 +77,7 @@ public class StockController {
             throw new RuntimeException(e);
         }
     }
-    @GetMapping("/all-stocks")
+    @GetMapping("/api-v1/all-stocks")
     public List<StockDTO> getAllStocks(){
         try {
             return stockService.getAllStocks();

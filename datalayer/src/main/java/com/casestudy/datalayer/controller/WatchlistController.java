@@ -13,7 +13,7 @@ public class WatchlistController {
     @Autowired
     private WatchlistService watchlistService;
 
-    @PatchMapping("/stock/{stockId}/watchlist/{watchlisId}")
+    @PatchMapping("auth/api-v1/stock/{stockId}/watchlist/{watchlisId}")
     public String addStockToWatchlist(@PathVariable("stockId") UUID stockId, @PathVariable("watchlisId") UUID watchlisId) {
         try {
             return watchlistService.addStockToWatchlist(stockId, watchlisId);
@@ -22,7 +22,7 @@ public class WatchlistController {
         }
     }
 
-    @PatchMapping("/watchlist/{watchlistid}/stock/{stockId}")
+    @PatchMapping("auth/api-v1/watchlist/{watchlistid}/stock/{stockId}")
     public String removeStockFromWatchlist(@PathVariable("watchlistid") UUID id, @PathVariable("stockId") UUID stockId) {
         try {
             return watchlistService.deleteStockFromWatchlist(id, stockId);
@@ -31,7 +31,7 @@ public class WatchlistController {
         }
     }
 
-    @GetMapping("/user/{id}/watchlist")
+    @GetMapping("auth/api-v1/user/{id}/watchlist")
     public WatchlistDTO getWatchlistByUserId(@PathVariable("id") UUID id) {
         try {
             return watchlistService.getWatchlistByUserId(id);
@@ -39,7 +39,7 @@ public class WatchlistController {
             throw new RuntimeException(e);
         }
     }
-    @GetMapping("/watchlist")
+    @GetMapping("auth/api-v1/watchlist")
     public List<WatchlistDTO> getAllWatchlists() {
         try {
             return watchlistService.getAllWatchlists();
@@ -47,7 +47,7 @@ public class WatchlistController {
             throw new RuntimeException(e);
         }
     }
-    @GetMapping("/watchlist/{watchlistId}")
+    @GetMapping("auth/api-v1/watchlist/{watchlistId}")
     public WatchlistDTO getWatchlist(@PathVariable("watchlistId") UUID id) {
         try {
             return watchlistService.getWatchlist(id);

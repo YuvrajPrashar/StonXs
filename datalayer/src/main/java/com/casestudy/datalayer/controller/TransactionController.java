@@ -13,7 +13,7 @@ public class TransactionController {
     @Autowired
     private TransactionService transactionService;
 
-    @PostMapping("/user/{userid}/stock/{stockid}")
+    @PostMapping("auth/api-v1/user/{userid}/stock/{stockid}")
     public String getTransactionByUserIdAndStockId(@PathVariable("userid") UUID userid, @PathVariable("stockid") UUID stockid, @RequestBody TransactionDTO transactionDTO) {
         try {
             return transactionService.getTransactionByUserIdAndStockId(userid, stockid, transactionDTO);
@@ -22,7 +22,7 @@ public class TransactionController {
         }
     }
 
-    @PatchMapping("/transaction/{id}")
+    @PatchMapping("auth/api-v1/transaction/{id}")
     public String deleteTransaction(@PathVariable("id") UUID id) {
         try {
             return transactionService.deleteTransaction(id);
@@ -31,7 +31,7 @@ public class TransactionController {
         }
     }
 
-    @GetMapping("/transactions/{userid}")
+    @GetMapping("auth/api-v1/transactions/{userid}")
     public List<TransactionDTO> getTransactionByUserId(@PathVariable("userid") UUID userid) {
         try {
             return transactionService.getTransactionByUserId(userid);
