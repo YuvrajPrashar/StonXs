@@ -13,8 +13,8 @@ public class TransactionController {
     @Autowired
     private TransactionService transactionService;
 
-    @PostMapping("auth/api-v1/user/{userid}/stock/{stockid}")
-    public String getTransactionByUserIdAndStockId(@PathVariable("userid") UUID userid, @PathVariable("stockid") UUID stockid, @RequestBody TransactionDTO transactionDTO) {
+    @PostMapping("auth/api-v1/transaction/user/{userid}/stock/{stockid}")
+    public String createTransactionByUserIdAndStockId(@PathVariable("userid") UUID userid, @PathVariable("stockid") UUID stockid, @RequestBody TransactionDTO transactionDTO) {
         try {
             return transactionService.getTransactionByUserIdAndStockId(userid, stockid, transactionDTO);
         } catch (Exception e) {

@@ -32,7 +32,7 @@ public class StockController {
         }
     }
 
-    @GetMapping("/auth/api-v1")
+    @GetMapping("/api-v1/search")
     public List<StockDTO> getStocksBySearching(@RequestParam(name = "search") String stockSymbl){
         try {
             return stockService.getStocksBySearch(stockSymbl);

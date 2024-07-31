@@ -10,7 +10,7 @@ const SearchResults = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/search?search=${searchQuery}`)
+      .get(`http://localhost:8080/stonks/api-v1/search?search=${searchQuery}`)
       .then((res) => {
         console.log(res.data);
         setResults(res.data);

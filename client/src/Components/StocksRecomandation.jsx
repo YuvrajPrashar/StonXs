@@ -10,7 +10,7 @@ const StocksRecomandation = () => {
   const navigate = useNavigate();
   useEffect(() => {
     axios
-      .get("http://localhost:8080/stocks?pageNo=2&pageSize=7")
+      .get("http://localhost:8080/stonks/api-v1/stocks?pageNo=2&pageSize=7")
       .then((res) => {
         setStocksDATA(res.data.content);
       });

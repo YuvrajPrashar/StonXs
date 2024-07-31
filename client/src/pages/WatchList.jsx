@@ -10,7 +10,10 @@ const WatchList = () => {
   };
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/watchlist/${watchlistId}`, config)
+      .get(
+        `http://localhost:8080/stonks/auth/api-v1/watchlist/${watchlistId}`,
+        config
+      )
       .then((res) => {
         setStocks(res.data.stocks);
       })

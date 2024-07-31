@@ -29,18 +29,18 @@ const TradeForm = ({ stockData }) => {
     if (userId) {
       axios
         .post(
-          `http://localhost:8080/user/${userId}/stock/${stockId}`,
+          `http://localhost:8080/stonks/auth/api-v1/transaction/user/${userId}/stock/${stockId}`,
           data,
           config
         )
         .then((res) => {
           setShowModal(true);
-          setModalMessage(res.data.message);
+          setModalMessage(res.data);
           console.log(res);
         })
         .catch((err) => {
           setShowModal(true);
-          setModalMessage(err.response.data.message);
+          setModalMessage(err.response.data);
           console.log(err);
         });
     } else {

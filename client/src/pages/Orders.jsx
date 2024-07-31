@@ -3,12 +3,20 @@ import { useEffect, useState } from "react";
 
 const Orders = () => {
   const [orders, setOrders] = useState(null);
+  const token = localStorage.getItem("token");
+  const config = { headers: { Authorization: `${token}` } };
+  console.log(config);
   useEffect(() => {
     const userId = localStorage.getItem("userId");
-    axios.get(`http://localhost:8080/transactions/${userId}`).then((res) => {
-      console.log(res.data);
-      setOrders(res.data);
-    });
+    axios
+      .get(
+        `http://localhost:8080/stonks/auth/api-v1/transactions/${userId}`,
+        config
+      )
+      .then((res) => {
+        console.log(res.data);
+        setOrders(res.data);
+      });
   }, []);
   return (
     <div className="w-screen h-screen space-y-10 p-10 ">

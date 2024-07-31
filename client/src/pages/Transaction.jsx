@@ -9,7 +9,7 @@ const Transaction = () => {
   const [StockData, setStockData] = useState(null);
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/stock/${stockid}`)
+      .get(`http://localhost:8080/stonks/api-v1/stock/${stockid}`)
       .then((res) => {
         setStockData(res.data);
       })

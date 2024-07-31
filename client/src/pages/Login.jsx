@@ -15,7 +15,9 @@ const Login = () => {
 
   const signInHandler = () => {
     axios
-      .post("http://localhost:8080/login", data, { withCredentials: true })
+      .post("http://localhost:8080/stonks/api-v1/login", data, {
+        withCredentials: true,
+      })
       .then((res) => {
         setModalMessage(res.data);
         localStorage.setItem("token", res.headers["authorization"]);

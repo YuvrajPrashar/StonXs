@@ -22,10 +22,10 @@ const AllStocks = () => {
       try {
         const response = category
           ? await axios.get(
-              `http://localhost:8080/stocks/${category}?pageNo=${currentPage}&pageSize=${pageSize}`
+              `http://localhost:8080/stonks/api-v1/stocks/${category}?pageNo=${currentPage}&pageSize=${pageSize}`
             )
           : await axios.get(
-              `http://localhost:8080/stocks?pageNo=${currentPage}&pageSize=${pageSize}`
+              `http://localhost:8080/stonks/api-v1/stocks?pageNo=${currentPage}&pageSize=${pageSize}`
             );
         console.log(response);
         setStocksDATA(response.data.content);

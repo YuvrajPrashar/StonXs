@@ -15,7 +15,7 @@ const SignUp = () => {
 
   const signUpHandler = () => {
     axios
-      .post("http://localhost:8080/signup", data)
+      .post("http://localhost:8080/stonks/api-v1/signup", data)
       .then((res) => {
         setShowModal(true);
         setModalMessage(res.data);

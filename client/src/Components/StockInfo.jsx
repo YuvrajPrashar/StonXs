@@ -7,19 +7,23 @@ const StockInfo = (props) => {
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
 
+  const watchlistId = localStorage.getItem("watchlistId");
+  const token = localStorage.getItem("token");
+  const config = { headers: { Authorization: `${token}` } };
   const watchListHandler = () => {
-    const watchlistId = localStorage.getItem("watchlistId");
+    console.log(config);
     watchlistId
       ? axios
           .patch(
-            `http://localhost:8080/stock/${props.stockData.stockid}/watchlist/${watchlistId}`
+            `http://localhost:8080/stonks/auth/api-v1/stock/${props.stockData.stockid}/watchlist/${watchlistId}`,
+            config
           )
           .then((res) => {
-            setModalMessage(res.data);
+            setModalMessage(res.data.message);
             setShowModal(true);
           })
           .catch((error) => {
-            setModalMessage(error.response.data);
+            setModalMessage(error.response.data.message);
             setShowModal(true);
           })
       : setModalMessage("Please login to add to watchlist");

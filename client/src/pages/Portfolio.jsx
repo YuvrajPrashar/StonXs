@@ -13,7 +13,7 @@ const Portfolio = () => {
   };
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/portfolio/${portfolioId}`, config)
+      .get(`http://localhost:8080/stonks/auth/api-v1/portfolio/${portfolioId}`, config)
       .then((res) => {
         console.log(res.data);
         setData(res.data);
