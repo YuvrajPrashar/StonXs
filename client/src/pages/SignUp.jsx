@@ -14,6 +14,7 @@ const SignUp = () => {
   });
 
   const signUpHandler = () => {
+    console.log(data);
     axios
       .post("http://localhost:8080/stonks/api-v1/signup", data)
       .then((res) => {

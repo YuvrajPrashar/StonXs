@@ -16,10 +16,11 @@ const StockInfo = (props) => {
       ? axios
           .patch(
             `http://localhost:8080/stonks/auth/api-v1/stock/${props.stockData.stockid}/watchlist/${watchlistId}`,
+            [],
             config
           )
           .then((res) => {
-            setModalMessage(res.data.message);
+            setModalMessage(res.data);
             setShowModal(true);
           })
           .catch((error) => {
@@ -28,7 +29,7 @@ const StockInfo = (props) => {
           })
       : setModalMessage("Please login to add to watchlist");
     setShowModal(true);
-  };
+  };  
 
   return (
     <div className="bg-white shadow-md border-2 hover:shadow-lg rounded-3xl p-6 transition-shadow duration-300 ease-in-out my-4">

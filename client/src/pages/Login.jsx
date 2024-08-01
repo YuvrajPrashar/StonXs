@@ -33,11 +33,9 @@ const Login = () => {
         }, 1700);
       })
       .catch((error) => {
-        console.log(
-          "Login Error:",
-          error.response ? error.response.data : error.message
-        );
-        setModalMessage(error.response ? error.response.data : error.message);
+        console.log("Login Error:", error.response.data);
+        setModalMessage(error.response.data);
+        setShowModal(true);
       });
   };
 
