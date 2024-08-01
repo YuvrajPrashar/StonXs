@@ -56,21 +56,21 @@ public class Stock {
         companyCategory();
     }
 
-    private void calculateCurrentPrice() {
-        if (marketCap != null && marketCap.compareTo(BigInteger.ZERO) != 0) {
-            this.currentPrice = new BigDecimal(companyValuation).divide(new BigDecimal(marketCap), 2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
-        } else {
-            this.currentPrice = BigDecimal.ZERO;
+        private void calculateCurrentPrice() {
+            if (marketCap != null && companyValuation != null && companyValuation.compareTo(BigInteger.ZERO) != 0) {
+                this.currentPrice = new BigDecimal(marketCap).divide(new BigDecimal(companyValuation), 2, BigDecimal.ROUND_HALF_UP);
+            } else {
+                this.currentPrice = BigDecimal.ZERO;
+            }
         }
-    }
 
     private void companyCategory() {
         if (this.companyValuation.compareTo(BigInteger.valueOf(10000000)) > 0) {
-            this.category = "Large Cap";
+            this.category = "large-cap";
         } else if (this.companyValuation.compareTo(BigInteger.valueOf(1000000)) > 0) {
-            this.category = "Mid Cap";
+            this.category = "mid-cap";
         } else {
-            this.category = "Small Cap";
+            this.category = "small-cap";
         }
     }
 }

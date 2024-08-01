@@ -4,6 +4,7 @@ import com.casestudy.datalayer.MapperUtil;
 import com.casestudy.datalayer.dto.StockDTO;
 import com.casestudy.datalayer.entity.Stock;
 import com.casestudy.datalayer.repositary.StocksRepo;
+import jakarta.transaction.Transactional;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,12 +23,62 @@ public class StockService {
     @Autowired
     MapperUtil mapperUtil;
 
+    //get stocks by category
+    @Transactional
+    public Page<StockDTO> getStocksByCategory(String category , int pageNo, int pageSize) {
+        try {
+            // Sorting the stocks by stock name
+            System.out.println(category);
+            PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+            // Fetching the stocks
+            Page<StockDTO> stockPage = stocksRepo.findAllByCategory(category, pageRequest).map(stock -> mapperUtil.mapStockToStockDto(stock));
+            System.out.println(stockPage);
+            return stockPage;
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    //get stocks by pages
+    @Transactional
+    public Page<StockDTO> getStocksByPages(int pageNo, int pageSize ) {
+        try {
+            // Sorting the stocks by stock name
+            PageRequest pageRequest = PageRequest.of(pageNo, pageSize, Sort.by("stockName").ascending());
+            // Fetching the stocks
+            Page<StockDTO> stockPage = stocksRepo.findAll(pageRequest).map(stock -> mapperUtil.mapStockToStockDto(stock));
+            return stockPage;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    //get stocks by search
+    @Transactional
+    public List<StockDTO> getStocksBySearch(String search) {
+        try {
+            // Fetching the stocks by search
+            return  mapperUtil.mapStockListToStockDTOList(stocksRepo.findBySearch(search));
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    //create stock
+    @Transactional
     public String createStock(StockDTO stock){
         try {
+            // Saving the stock
+            //Checking if stock already exists or not by stock symbol and stock name
+            if(stocksRepo.existsByStockSymbol(stock.getStockSymbol()) || stocksRepo.existsByStockName(stock.getStockName())){
+                return "Stock already exists";
+            }
             stocksRepo.save(mapperUtil.mapStockDtoToStock(stock));
             return "Stock created successfully";
         } catch (Exception e) {
-            throw new RuntimeException(e);
+                return "Error creating stock";
         }
     }
     public StockDTO getStock(UUID id){
@@ -41,8 +92,12 @@ public class StockService {
             throw new RuntimeException(e);
         }
     }
+
+    //delete stock
+    @Transactional
     public String deleteStock(UUID id){
         try {
+            // Fetching the stock
             Stock stock = stocksRepo.findById(id).orElse(null);
             if(stock == null){
                 return "Stock not found";
@@ -53,6 +108,9 @@ public class StockService {
             throw new RuntimeException(e);
         }
     }
+
+    //update stock
+    @Transactional
     public String updateStock(UUID id,StockDTO stockDto){
         try {
             Stock stock =mapperUtil.mapStockDtoToStock(stockDto);
@@ -60,16 +118,23 @@ public class StockService {
             if(stock1 == null){
                 return "Stock not found";
             }
+            //Checking if stock already exists or not by stock symbol and stock name
+            if(stocksRepo.existsByStockSymbol(stock.getStockSymbol()) || stocksRepo.existsByStockName(stock.getStockName())){
+                return "Stock already exists";
+            }
+            stock1.setStockSymbol(stock.getStockSymbol());
             stock1.setStockName(stock.getStockName());
             stock1.setCurrentPrice(stock.getCurrentPrice());
             stock1.setSector(stock.getSector());
-            stock1.setStockSymbol(stock.getStockSymbol());
             stocksRepo.save(stock1);
             return "Stock updated successfully";
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
+
+    //get all stocks
+    @Transactional
     public List<StockDTO> getAllStocks(){
         try {
             return mapperUtil.mapStockListToStockDTOList(stocksRepo.findAll());
@@ -79,40 +144,4 @@ public class StockService {
     }
 
 
-    public Page<StockDTO> getStocksByCategory(String category , int pageNo, int pageSize) {
-        try {
-            System.out.println(stocksRepo.findAllByCategory(category))    ;
-            PageRequest pageRequest = PageRequest.of(pageNo, pageSize, Sort.by("stockName").ascending());
-            Page<StockDTO> stockPage = stocksRepo.findAllByCategory(category, pageRequest).map(stock -> mapperUtil.mapStockToStockDto(stock));
-            return stockPage;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public Page<StockDTO> getStocksByPages(int pageNo, int pageSize ) {
-        try {
-            PageRequest pageRequest = PageRequest.of(pageNo, pageSize, Sort.by("stockName").ascending());
-            Page<StockDTO> stockPage = stocksRepo.findAll(pageRequest).map(stock -> mapperUtil.mapStockToStockDto(stock));
-            return stockPage;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public List<StockDTO> getStocksBySearch(String search) {
-        try {
-//            Stock stock = stocksRepo.findAll().stream().filter(stock1 -> stock1.getStockSymbol().equals(search)
-//                    || stock1.getStockSymbol().equals(search)).findFirst().orElse(null);
-//            if(Objects.isNull(stock)){
-//                return null;
-//            }
-//            return mapperUtil.mapStockToStockDto(stock);
-
-            return  mapperUtil.mapStockListToStockDTOList(stocksRepo.findBySearch(search));
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 }

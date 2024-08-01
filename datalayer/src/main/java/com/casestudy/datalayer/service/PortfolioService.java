@@ -8,6 +8,7 @@ import com.casestudy.datalayer.entity.User;
 import com.casestudy.datalayer.repositary.HoldingsRepo;
 import com.casestudy.datalayer.repositary.PortfolioRepo;
 import com.casestudy.datalayer.repositary.UserRepo;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,18 +29,23 @@ public class PortfolioService {
     HoldingsRepo holdingsRepo;
 
 
+    //find portfolio by user id
+    @Transactional
     public PortfolioDTO getPortfolioByUserId(UUID id) {
         try {
+            // Fetching the user
             User user = userRepo.findById(id).orElse(null);
             if (user == null) {
                 return null;
             }
+
+            // Fetching the portfolio
             Portfolio portfolio= user.getPortfolio();
             PortfolioDTO portfolioDTO = mapperUtil.mapPortfolioToPortfolioDTO(portfolio);
             List<Stock> stocks = new ArrayList<>();
             List<Holdings> holdings = holdingsRepo.findByPortfolio(portfolio);
 
-
+            // Calculating the current value of the portfolio
             int calculatedCurrentValue = 0;
             for (Holdings holding : holdings) {
                 BigDecimal currentPrice = holding.getStocks().getCurrentPrice();
@@ -50,16 +56,21 @@ public class PortfolioService {
             }
             portfolioDTO.setStocks(mapperUtil.mapStockListToStockDTOList(stocks));
 
+            // Setting the current value and PnL of the portfolio
             portfolioDTO.setCurrentValue(calculatedCurrentValue);
             portfolioDTO.setPnl(calculatedCurrentValue - portfolioDTO.getInvestedvalue());
             return portfolioDTO;
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error fetching portfolio data", e);
         }
     }
+
+    //find portfolio by portfolio id
+    @Transactional
     public PortfolioDTO getPortfolioByPortfolioId(UUID id) {
         try {
+            // Fetching the portfolio
             Portfolio portfolio = portfolioRepo.findById(id).orElse(null);
             if (portfolio == null) {
                 return null;
@@ -70,7 +81,7 @@ public class PortfolioService {
             List<Stock> stocks = new ArrayList<>();
             List<Holdings> holdings = holdingsRepo.findByPortfolio(portfolio);
 
-
+            // Calculating the current value of the portfolio
             int calculatedCurrentValue = 0;
             for (Holdings holding : holdings) {
                 BigDecimal currentPrice = holding.getStocks().getCurrentPrice();
@@ -80,7 +91,7 @@ public class PortfolioService {
                 stocks.add(holding.getStocks());
             }
             portfolioDTO.setStocks(mapperUtil.mapStockListToStockDTOList(stocks));
-
+            //  Setting the current value and PnL of the portfolio
             portfolioDTO.setCurrentValue(calculatedCurrentValue);
             portfolioDTO.setPnl(calculatedCurrentValue - portfolioDTO.getInvestedvalue());
             return portfolioDTO;
@@ -90,9 +101,11 @@ public class PortfolioService {
         }
     }
 
-
+    //get all portfolios
+    @Transactional
     public List<PortfolioDTO> getAllPortfolios() {
         try {
+            // Fetching all portfolios
             return mapperUtil.mapPortfolioListToPortfolioDTOList(portfolioRepo.findAll());
         } catch (Exception e) {
             throw new RuntimeException(e);

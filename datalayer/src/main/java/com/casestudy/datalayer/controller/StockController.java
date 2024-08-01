@@ -4,6 +4,8 @@ import com.casestudy.datalayer.dto.StockDTO;
 import com.casestudy.datalayer.service.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,75 +16,125 @@ public class StockController {
     @Autowired
     StockService stockService;
 
+    //get all stocks
     @GetMapping("/api-v1/stocks")
-    public Page<StockDTO> getStocksByPage(@RequestParam(defaultValue = "0") int pageNo, @RequestParam(defaultValue = "15") int pageSize){
+    public ResponseEntity<Page<StockDTO>> getStocksByPage(@RequestParam(defaultValue = "0") int pageNo, @RequestParam(defaultValue = "15") int pageSize){
         try {
-            return stockService.getStocksByPages(pageNo, pageSize);
+            Page<StockDTO> res = stockService.getStocksByPages(pageNo,pageSize);
+            if (res.isEmpty()) {
+                return ResponseEntity.status(404).build();
+            }
+            return ResponseEntity.ok(res);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.status(500).build();
         }
     }
 
+    //get stocks by category
     @GetMapping("/api-v1/stocks/{category}")
-    public Page<StockDTO> getStocksByCategory(@PathVariable String category ,@RequestParam(defaultValue = "0") int pageNo, @RequestParam(defaultValue = "15") int pageSize){
+    public ResponseEntity<Page<StockDTO>> getStocksByCategory(@PathVariable String category ,@RequestParam(defaultValue = "0") int pageNo, @RequestParam(defaultValue = "15") int pageSize){
         try {
-            return stockService.getStocksByCategory(category,pageNo,pageSize);
+            Page<StockDTO> res = stockService.getStocksByCategory(category,pageNo,pageSize);
+            if (res.isEmpty()) {
+                return ResponseEntity.status(404).build();
+            }
+            return new ResponseEntity<>(res, HttpStatus.OK);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.status(500).build();
         }
     }
 
+    //get stocks by search
     @GetMapping("/api-v1/search")
-    public List<StockDTO> getStocksBySearching(@RequestParam(name = "search") String stockSymbl){
+    public ResponseEntity<List<StockDTO>> getStocksBySearching(@RequestParam(name = "search") String stockSymbl){
         try {
-            return stockService.getStocksBySearch(stockSymbl);
+            List<StockDTO> res = stockService.getStocksBySearch(stockSymbl);
+            if (res.isEmpty()) {
+                return ResponseEntity.status(404).build();
+            }
+            return ResponseEntity.ok(res);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.status(500).build();
         }
     }
 
-
+    //get stock by id
     @GetMapping("/api-v1/stock/{id}")
-    public StockDTO getStock(@PathVariable("id") UUID id){
+    public ResponseEntity<StockDTO> getStock(@PathVariable("id") UUID id){
         try {
-            return stockService.getStock(id);
+            StockDTO res = stockService.getStock(id);
+            if (res == null) {
+                return ResponseEntity.status(404).build();
+            }
+            return ResponseEntity.ok(res);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.status(500).build();
         }
     }
 
-
-
+    //update stock
     @PatchMapping("/auth/api-v1/stock/{id}")
-    public String updateStock(@PathVariable("id") UUID id, @RequestBody StockDTO stockDto){
+    public ResponseEntity<String> updateStock(@PathVariable("id") UUID id, @RequestBody StockDTO stockDto){
         try {
-            return stockService.updateStock(id,stockDto);
+            String res = stockService.updateStock(id,stockDto);
+            if (res.contains("exists")) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            } else if (res.contains("Error")) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            } else if (res.contains("not found")) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+                return ResponseEntity.status(HttpStatus.OK).build();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.status(500).build();
         }
     }
+
+    //delete stock
     @DeleteMapping("/auth/api-v1/stock/{id}")
-    public String deleteStock(@PathVariable("id") UUID id){
+    public ResponseEntity<String> deleteStock(@PathVariable("id") UUID id){
         try {
-            return stockService.deleteStock(id);
+            String res = stockService.deleteStock(id);
+
+            if (res.contains("not found")) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+
+            return ResponseEntity.ok(res);
+
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.status(500).build();
         }
     }
+
+    //create stock
     @PostMapping("/auth/api-v1/stock")
-    public String createStock(@RequestBody StockDTO stockDto){
+    public ResponseEntity<String> createStock(@RequestBody StockDTO stockDto){
         try {
-            return stockService.createStock(stockDto);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+            String res = stockService.createStock(stockDto);
+            if (res.contains("exists")) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            } else if (res.contains("Error")) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
+                return ResponseEntity.ok(res);
+            }
+        catch(Exception e){
+            return ResponseEntity.status(500).build();
         }
     }
+
+    //get all stocks
     @GetMapping("/api-v1/all-stocks")
-    public List<StockDTO> getAllStocks(){
+    public ResponseEntity<List<StockDTO>> getAllStocks(){
         try {
-            return stockService.getAllStocks();
+            List<StockDTO> res = stockService.getAllStocks();
+            if (res.isEmpty()) {
+                return ResponseEntity.status(404).build();
+            }
+            return ResponseEntity.ok(res);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.status(500).build();
         }
     }
 }

@@ -19,7 +19,7 @@ public class MyDataService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userrepo.findByUsername(username);
         if (user == null) {
-            throw new UsernameNotFoundException("User 404");
+            throw new UsernameNotFoundException("User not found");
         }
         return new UserPrinciple(user);
     }

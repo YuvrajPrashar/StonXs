@@ -4,8 +4,10 @@ import com.casestudy.datalayer.MapperUtil;
 import com.casestudy.datalayer.dto.TransactionDTO;
 import com.casestudy.datalayer.entity.*;
 import com.casestudy.datalayer.repositary.*;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -31,8 +33,12 @@ public class TransactionService {
     @Autowired
     private HoldingsRepo holdingsRepo;
 
+    //create new transaction
+    @Transactional
     public String getTransactionByUserIdAndStockId(UUID userid, UUID stockid, TransactionDTO transactionDTO) {
+
         try {
+            // Fetching the user and stock
             User user = userRepo.findById(userid).orElse(null);
             Stock stock = stockRepo.findById(stockid).orElse(null);
 
@@ -40,11 +46,13 @@ public class TransactionService {
                 return null;
             }
 
+            // Fetching the portfolio and details
             Portfolio portfolio = user.getPortfolio();
             long quantity = transactionDTO.getQuantity();
             String transactionType = transactionDTO.getTransactionType();
             float price = transactionDTO.getPrice();
 
+            // Creating a new transaction
             Transactions transaction = new Transactions();
             transaction.setUser(user);
             transaction.setPortfolio(portfolio);
@@ -54,6 +62,7 @@ public class TransactionService {
             transaction.setTransactionType(transactionType);
             transaction.setStatus("Progress");
 
+            // Executing the transaction
             if (transactionType.equals("buy")) {
                 if (portfolio.getBalance() < quantity * price) {
                     transaction.setStatus("Cancelled");
@@ -61,6 +70,7 @@ public class TransactionService {
                     return "Insufficient balance";
                 }
 
+                // Updating the holdings
                 List<Holdings> holdings = holdingsRepo.findByPortfolio(portfolio);
                 Holdings holdingToUpdate = null;
 
@@ -96,7 +106,7 @@ public class TransactionService {
             } else if (transactionType.equals("sell")) {
                 List<Holdings> holdings = holdingsRepo.findByPortfolio(portfolio);
                 Holdings holdingToUpdate = null;
-
+                // Updating the holdings
                 if (holdings != null) {
                     for (Holdings holding : holdings) {
                         if (holding.getStocks().getStockId().equals(stock.getStockId())) {
@@ -106,6 +116,7 @@ public class TransactionService {
                     }
                 }
 
+                // Checking if the user has enough holdings
                 if (holdingToUpdate == null || holdingToUpdate.getQuantity() < quantity) {
                     transaction.setStatus("Cancelled");
                     transactionRepo.save(transaction);
@@ -128,24 +139,12 @@ public class TransactionService {
                 return "Invalid transaction type";
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            return "Transaction failed";
         }
     }
 
-    public String deleteTransaction(UUID id) {
-        try {
-            Transactions transaction = transactionRepo.findById(id).orElse(null);
-            if (transaction == null) {
-                return "Transaction not found";
-            }
-            transaction.setDeleted(true);
-            transactionRepo.save(transaction);
-            return "Transaction deleted successfully";
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
+    //get all transactions of a user
+    @Transactional
     public List<TransactionDTO> getTransactionByUserId(UUID userid) {
         try {
             User user = userRepo.findById(userid).orElse(null);
