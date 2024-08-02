@@ -10,8 +10,8 @@ const StockInfo = (props) => {
   const watchlistId = localStorage.getItem("watchlistId");
   const token = localStorage.getItem("token");
   const config = { headers: { Authorization: `${token}` } };
+
   const watchListHandler = () => {
-    console.log(config);
     watchlistId
       ? axios
           .patch(
@@ -29,11 +29,11 @@ const StockInfo = (props) => {
           })
       : setModalMessage("Please login to add to watchlist");
     setShowModal(true);
-  };  
+  };
 
   return (
     <div className="bg-white shadow-md border-2 hover:shadow-lg rounded-3xl p-6 transition-shadow duration-300 ease-in-out my-4">
-      <div className="grid grid-cols-3 gap-5 p-3">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 p-3">
         <div className="col-span-2 font-bold text-2xl text-blue-600">
           {props.stockData?.stocksymbol}
         </div>

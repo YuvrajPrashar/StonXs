@@ -27,7 +27,6 @@ const AllStocks = () => {
           : await axios.get(
               `http://localhost:8080/stonks/api-v1/stocks?pageNo=${currentPage}&pageSize=${pageSize}`
             );
-        console.log(response);
         setStocksDATA(response.data.content);
         setSortedStocks(response.data.content);
         setTotalPages(response.data.totalPages);
@@ -62,15 +61,17 @@ const AllStocks = () => {
   };
 
   return (
-    <div className="h-screen">
-      <div className="p-2 grid grid-flow-col w-screen justify-stretch content-center">
-        <div className="p-3 justify-self-start">
+    <div className="min-h-screen">
+      <div className="p-2 flex flex-wrap items-center justify-between w-full">
+        <div className="p-3 flex items-center">
           <SwapVertIcon />
-          <label htmlFor="sort"> Sort By</label>
+          <label htmlFor="sort" className="ml-2">
+            Sort By
+          </label>
           <select
             name="sort"
             id="sort"
-            className="bg-transparent"
+            className="bg-transparent ml-2"
             onChange={(e) => {
               setSortOption(e.target.value);
             }}
@@ -83,30 +84,29 @@ const AllStocks = () => {
             <option value="reverseAlphabets">Z-A</option>
           </select>
         </div>
-        <div className="space-x-4 content-center justify-self-end pr-16">
-          <FormatListBulleted onClick={layoutHandler} />
-          <WindowSharp onClick={layoutHandler} />
+        <div className="flex space-x-4 pr-4">
+          <FormatListBulleted
+            onClick={layoutHandler}
+            className="cursor-pointer"
+          />
+          <WindowSharp onClick={layoutHandler} className="cursor-pointer" />
         </div>
       </div>
-      {grid && (
-        <div className="w-5/6 mx-auto my-2 grid grid-cols-5 gap-4 h-5/6 ">
-          {sortedStocks.map((stockElm) => {
-            return (
-              <StocksCard
-                key={stockElm.stockid}
-                stockName={stockElm.stockname}
-                stockSymbol={stockElm.stocksymbol}
-                stockSector={stockElm.sector}
-                stockPrice={stockElm.currentprice}
-                stockid={stockElm.stockid}
-              />
-            );
-          })}
+      {grid ? (
+        <div className="w-full px-4 my-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 justify-items-center">
+          {sortedStocks.map((stockElm) => (
+            <StocksCard
+              key={stockElm.stockid}
+              stockName={stockElm.stockname}
+              stockSymbol={stockElm.stocksymbol}
+              stockSector={stockElm.sector}
+              stockPrice={stockElm.currentprice}
+              stockid={stockElm.stockid}
+            />
+          ))}
         </div>
-      )}
-
-      {!grid && (
-        <div className="w-5/6 h-5/6 shadow-xl mx-auto my-2 overflow-auto">
+      ) : (
+        <div className="w-full px-4 my-4 shadow-xl overflow-auto">
           <Stockstable stocks={sortedStocks} />
         </div>
       )}

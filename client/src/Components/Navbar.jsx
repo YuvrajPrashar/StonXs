@@ -51,21 +51,21 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="top-0 flex w-screen items-center py-3 px-5 gap-3 space-x-2 bg-gray-800 text-white">
-      <div className="text-4xl font-bold w-max">
+    <nav className="top-0 flex flex-col md:flex-row w-full items-center py-3 px-5 gap-3 bg-gray-800 text-white">
+      <div className="text-2xl md:text-4xl font-bold">
         <Link to="/">Stonks</Link>
       </div>
-      <div className="w-1/5">
+      <div className="w-full md:w-1/5 mt-3 md:mt-0">
         <SearchBar />
       </div>
-      <div className="flex flex-1 justify-start text-xl content-center w-max ">
+      <div className="flex flex-col md:flex-row md:flex-1 justify-center md:justify-start text-xl mt-3 md:mt-0">
         <Link to="/stocks" className="hover:text-gray-400 cursor-pointer">
           Explore
         </Link>
       </div>
-      <div className="flex items-center mt-2 ml-auto md:mt-0">
+      <div className="flex items-center mt-3 md:mt-0 mx-auto">
         {loggedIn ? (
-          <div className="hover:text-gray-400 cursor-pointer space-x-2 align-bottom text-xl content-center">
+          <div className="flex items-center space-x-2">
             <PersonIcon />
             <select
               className="bg-gray-800 border-0 text-white focus:outline-none hover:text-gray-400 cursor-pointer"
@@ -82,9 +82,11 @@ const Navbar = () => {
             </select>
           </div>
         ) : (
-          <div className="hover:text-gray-400 cursor-pointer space-x-2 align-bottom text-xl content-center">
+          <div className="flex items-center space-x-2">
             <LoginSharp />
-            <Link to="/login">Log In</Link>
+            <Link to="/login" className="hover:text-gray-400 cursor-pointer">
+              Log In
+            </Link>
           </div>
         )}
       </div>

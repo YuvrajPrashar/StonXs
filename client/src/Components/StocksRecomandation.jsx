@@ -8,6 +8,7 @@ import axios from "axios";
 const StocksRecomandation = () => {
   const [stocksDATA, setStocksDATA] = useState([]);
   const navigate = useNavigate();
+
   useEffect(() => {
     axios
       .get("http://localhost:8080/stonks/api-v1/stocks?pageNo=2&pageSize=7")
@@ -15,25 +16,25 @@ const StocksRecomandation = () => {
         setStocksDATA(res.data.content);
       });
   }, []);
+
   const stockHandler = () => {
     navigate("/stocks");
   };
+
   return (
     <>
-      <div className="font-thin text-3xl ">Stocks</div>
-      <div className="flex flex-nowrap flex-row space-x-12 overflow-scroll m-2 p-2">
-        {stocksDATA.map((stockElm) => {
-          return (
-            <StocksCard
-              key={stockElm.stockid}
-              stockName={stockElm.stockname}
-              stockSymbol={stockElm.stocksymbol}
-              stockSector={stockElm.sector}
-              stockPrice={stockElm.currentprice}
-              stockid={stockElm.stockid}
-            />
-          );
-        })}
+      <div className="font-thin text-3xl">Stocks</div>
+      <div className="flex flex-nowrap space-x-4 overflow-x-auto py-2">
+        {stocksDATA.map((stockElm) => (
+          <StocksCard
+            key={stockElm.stockid}
+            stockName={stockElm.stockname}
+            stockSymbol={stockElm.stocksymbol}
+            stockSector={stockElm.sector}
+            stockPrice={stockElm.currentprice}
+            stockid={stockElm.stockid}
+          />
+        ))}
         <EmptyCard
           text="View All"
           icon={<ArrowForward />}

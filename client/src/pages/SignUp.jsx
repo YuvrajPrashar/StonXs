@@ -15,6 +15,10 @@ const SignUp = () => {
 
   const signUpHandler = () => {
     console.log(data);
+    data.username = data.username.trim();
+    data.email = data.email.trim();
+    data.password = data.password.trim();
+    data.fullname = data.fullname.trim();
     axios
       .post("http://localhost:8080/stonks/api-v1/signup", data)
       .then((res) => {

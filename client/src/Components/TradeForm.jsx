@@ -20,8 +20,7 @@ const TradeForm = ({ stockData }) => {
       status: "pending",
     };
 
-    const token = localStorage.getItem("token"); // Retrieve token from localStorage
-    console.log(token);
+    const token = localStorage.getItem("token");
     const config = {
       headers: { Authorization: `${token}` },
     };
@@ -36,12 +35,10 @@ const TradeForm = ({ stockData }) => {
         .then((res) => {
           setShowModal(true);
           setModalMessage(res.data);
-          console.log(res);
         })
         .catch((err) => {
           setShowModal(true);
           setModalMessage(err.response.data);
-          console.log(err);
         });
     } else {
       setShowModal(true);

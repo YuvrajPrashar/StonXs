@@ -3,7 +3,6 @@ import EmptyCard from "./EmptyCard.jsx";
 
 const Categories = () => {
   const navigate = useNavigate();
-
   const navigationHandler = (category) => {
     navigate(`/stocks/${category}`);
   };
@@ -11,7 +10,7 @@ const Categories = () => {
   return (
     <>
       <div className="font-thin text-3xl">Categories</div>
-      <div className="flex space-x-12 m-2 p-2">
+      <div className="flex flex-wrap justify-start gap-4 py-2">
         <EmptyCard
           text="Large Cap"
           link="src/assets/Large-Cap.png"

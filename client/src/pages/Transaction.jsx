@@ -7,6 +7,7 @@ import axios from "axios";
 const Transaction = () => {
   const { stockid } = useParams();
   const [StockData, setStockData] = useState(null);
+
   useEffect(() => {
     axios
       .get(`http://localhost:8080/stonks/api-v1/stock/${stockid}`)
@@ -16,14 +17,15 @@ const Transaction = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [stockid]);
+
   return (
-    <div className=" grid grid-cols-4 gap-10 m-auto p-5 w-screen h-max">
-      <div className=" col-span-3 w-full  h-full ">
+    <div className="grid grid-cols-1 md:grid-cols-4 gap-10 m-auto p-5 w-screen h-max">
+      <div className="col-span-1 md:col-span-3 w-full h-full">
         <TradingView />
-      </div>{" "}
+      </div>
       <div className="w-auto">
-        <StockCard stock={StockData}  />
+        <StockCard stock={StockData} />
       </div>
     </div>
   );
