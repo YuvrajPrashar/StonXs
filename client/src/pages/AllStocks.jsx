@@ -16,17 +16,43 @@ const AllStocks = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [pageSize, setPageSize] = useState(15);
   const [totalPages, setTotalPages] = useState(0);
+  const [selectedSector, setSelectedSector] = useState(""); // New state for selected sector
+
+  const sectors = [
+    "Communication Services",
+    "Consumer Discretionary",
+    "Consumer Staples",
+    "Energy",
+    "Financials",
+    "Health Care",
+    "Industrials",
+    "Information Technology",
+    "Materials",
+    "Utilities",
+  ];
 
   useEffect(() => {
     const fetchStocks = async () => {
       try {
+        const params = {
+          pageNo: currentPage,
+          pageSize: pageSize,
+        };
+
+        if (selectedSector) {
+          params.sector = selectedSector;
+          setCurrentPage(0);
+        }
+
         const response = category
           ? await axios.get(
-              `http://localhost:8080/stonks/api-v1/stocks/${category}?pageNo=${currentPage}&pageSize=${pageSize}`
+              `http://localhost:8080/stonks/api-v1/stocks/${category}`,
+              { params }
             )
-          : await axios.get(
-              `http://localhost:8080/stonks/api-v1/stocks?pageNo=${currentPage}&pageSize=${pageSize}`
-            );
+          : await axios.get(`http://localhost:8080/stonks/api-v1/stocks`, {
+              params,
+            });
+
         setStocksDATA(response.data.content);
         setSortedStocks(response.data.content);
         setTotalPages(response.data.totalPages);
@@ -36,7 +62,7 @@ const AllStocks = () => {
     };
 
     fetchStocks();
-  }, [category, currentPage, pageSize]);
+  }, [category, currentPage, pageSize, selectedSector]);
 
   useEffect(() => {
     let sortedData = [...stocksDATA];
@@ -82,6 +108,26 @@ const AllStocks = () => {
             <option value="price">Price</option>
             <option value="alphabets">A-Z</option>
             <option value="reverseAlphabets">Z-A</option>
+          </select>
+        </div>
+        <div className="p-3 flex items-center">
+          <label htmlFor="sector" className="ml-2">
+            Sector
+          </label>
+          <select
+            name="sector"
+            id="sector"
+            className="bg-transparent ml-2"
+            onChange={(e) => {
+              setSelectedSector(e.target.value);
+            }}
+          >
+            <option value="">All</option>
+            {sectors.map((sector) => (
+              <option key={sector} value={sector}>
+                {sector}
+              </option>
+            ))}
           </select>
         </div>
         <div className="flex space-x-4 pr-4">
