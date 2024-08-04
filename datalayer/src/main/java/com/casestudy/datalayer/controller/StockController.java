@@ -19,9 +19,12 @@ public class StockController {
 
     //get all stocks
     @GetMapping("/api-v1/stocks")
-    public ResponseEntity<Page<StockDTO>> getStocksByPage(@RequestParam(defaultValue = "0") int pageNo, @RequestParam(defaultValue = "15") int pageSize){
+    public ResponseEntity<Page<StockDTO>> getStocksByPage(@RequestParam(defaultValue = "0") int pageNo
+            , @RequestParam(defaultValue = "15") int pageSize
+            ,@RequestParam(required = false) String sector
+            ){
         try {
-            Page<StockDTO> res = stockService.getStocksByPages(pageNo,pageSize);
+            Page<StockDTO> res = stockService.getStocksByPages(pageNo,pageSize,sector);
             if (res.isEmpty()) {
                 return ResponseEntity.status(404).build();
             }
@@ -33,9 +36,12 @@ public class StockController {
 
     //get stocks by category
     @GetMapping("/api-v1/stocks/{category}")
-    public ResponseEntity<Page<StockDTO>> getStocksByCategory(@PathVariable String category ,@RequestParam(defaultValue = "0") int pageNo, @RequestParam(defaultValue = "15") int pageSize){
+    public ResponseEntity<Page<StockDTO>> getStocksByCategory(@PathVariable String category
+            ,@RequestParam(defaultValue = "0") int pageNo
+            , @RequestParam(defaultValue = "15") int pageSize
+            ,@RequestParam(required = false) String sector){
         try {
-            Page<StockDTO> res = stockService.getStocksByCategory(category,pageNo,pageSize);
+            Page<StockDTO> res = stockService.getStocksByCategory(category,pageNo,pageSize,sector);
             if (res.isEmpty()) {
                 return ResponseEntity.status(404).build();
             }

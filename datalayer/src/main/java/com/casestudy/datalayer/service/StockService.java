@@ -31,14 +31,19 @@ public class StockService {
 
     //get stocks by category
     @Transactional
-    public Page<StockDTO> getStocksByCategory(String category , int pageNo, int pageSize) {
+    public Page<StockDTO> getStocksByCategory(String category , int pageNo, int pageSize, String sector) {
         try {
             // Sorting the stocks by stock name
             System.out.println(category);
             PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
             // Fetching the stocks
-            Page<StockDTO> stockPage = stocksRepo.findAllByCategory(category, pageRequest).map(stock -> mapperUtil.mapStockToStockDto(stock));
-            System.out.println(stockPage);
+
+            if (sector==null){
+                Page<StockDTO> stockPage = stocksRepo.findAllByCategoryAndIsDeletedFalse(category, pageRequest).map(stock -> mapperUtil.mapStockToStockDto(stock));
+                return stockPage;
+            }
+            Page<StockDTO> stockPage = stocksRepo.findAllBySectorAndCategoryAndIsDeletedFalse(sector, category, pageRequest).map(stock -> mapperUtil.mapStockToStockDto(stock));
+
             return stockPage;
 
         } catch (Exception e) {
@@ -48,12 +53,16 @@ public class StockService {
 
     //get stocks by pages
     @Transactional
-    public Page<StockDTO> getStocksByPages(int pageNo, int pageSize ) {
+    public Page<StockDTO> getStocksByPages(int pageNo, int pageSize, String sector) {
         try {
             // Sorting the stocks by stock name
             PageRequest pageRequest = PageRequest.of(pageNo, pageSize, Sort.by("stockName").ascending());
             // Fetching the stocks
-            Page<StockDTO> stockPage = stocksRepo.findAll(pageRequest).map(stock -> mapperUtil.mapStockToStockDto(stock));
+            if (sector==null){
+                Page<StockDTO> stockPage = stocksRepo.findAllByIsDeletedFalse(pageRequest).map(stock -> mapperUtil.mapStockToStockDto(stock));
+                return stockPage;
+            }
+            Page<StockDTO> stockPage = stocksRepo.findAllBySectorAndIsDeletedFalse(sector, pageRequest).map(stock -> mapperUtil.mapStockToStockDto(stock));
             return stockPage;
         } catch (Exception e) {
             throw new RuntimeException(e);
