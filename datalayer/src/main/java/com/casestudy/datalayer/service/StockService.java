@@ -1,9 +1,12 @@
 package com.casestudy.datalayer.service;
 
 import com.casestudy.datalayer.MapperUtil;
+import com.casestudy.datalayer.dto.NewStockDTO;
 import com.casestudy.datalayer.dto.StockDTO;
 import com.casestudy.datalayer.entity.Stock;
+import com.casestudy.datalayer.entity.User;
 import com.casestudy.datalayer.repositary.StocksRepo;
+import com.casestudy.datalayer.repositary.UserRepo;
 import jakarta.transaction.Transactional;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,9 @@ public class StockService {
     StocksRepo stocksRepo;
     @Autowired
     MapperUtil mapperUtil;
+
+    @Autowired
+    private UserRepo userRepo;
 
     //get stocks by category
     @Transactional
@@ -68,14 +74,21 @@ public class StockService {
 
     //create stock
     @Transactional
-    public String createStock(StockDTO stock){
+    public String createStock(NewStockDTO stock, UUID userid){
         try {
+            if (!userRepo.existsById(userid)) {
+                return "User not found";
+            }
+            User user = userRepo.findById(userid).orElse(null);
+            if (!user.isAdmin()){
+                return "User is not an admin";
+            }
             // Saving the stock
             //Checking if stock already exists or not by stock symbol and stock name
             if(stocksRepo.existsByStockSymbol(stock.getStockSymbol()) || stocksRepo.existsByStockName(stock.getStockName())){
                 return "Stock already exists";
             }
-            stocksRepo.save(mapperUtil.mapStockDtoToStock(stock));
+            stocksRepo.save(mapperUtil.mapNewStockDtoToStock(stock));
             return "Stock created successfully";
         } catch (Exception e) {
                 return "Error creating stock";
@@ -95,8 +108,17 @@ public class StockService {
 
     //delete stock
     @Transactional
-    public String deleteStock(UUID id){
+    public String deleteStock(UUID id,UUID userid){
         try {
+
+            if (!userRepo.existsById(userid)) {
+                return "User not found";
+            }
+            User user = userRepo.findById(userid).orElse(null);
+            if (!user.isAdmin()){
+                return "User is not an admin";
+            }
+
             // Fetching the stock
             Stock stock = stocksRepo.findById(id).orElse(null);
             if(stock == null){
@@ -111,8 +133,17 @@ public class StockService {
 
     //update stock
     @Transactional
-    public String updateStock(UUID id,StockDTO stockDto){
+    public String updateStock(UUID id,StockDTO stockDto,UUID userid){
         try {
+
+            if (!userRepo.existsById(userid)) {
+                return "User not found";
+            }
+            User user = userRepo.findById(userid).orElse(null);
+            if (!user.isAdmin()){
+                return "User is not an admin";
+            }
+
             Stock stock =mapperUtil.mapStockDtoToStock(stockDto);
             Stock stock1 = stocksRepo.findById(id).orElse(null);
             if(stock1 == null){

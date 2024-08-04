@@ -23,12 +23,14 @@ public class User {
     private String password;
     @Column(unique = true)
     private String email;
-    private boolean isDeleted = false;
+    @Column(columnDefinition = "boolean default false")
+    private boolean isDeleted;
     @OneToOne(mappedBy = "user")
     private Portfolio portfolio;
     @OneToOne(mappedBy = "user")
     private Watchlist watchlist;
-
+    @Column(columnDefinition = "boolean default false")
+    private boolean isAdmin;
 
     public User(String username, String password, String email , String fullname) {
         this.fullname=fullname;

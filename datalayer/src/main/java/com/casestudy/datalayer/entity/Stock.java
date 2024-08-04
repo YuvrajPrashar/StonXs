@@ -48,6 +48,16 @@ public class Stock {
         updateDerivedFields();
     }
 
+    public Stock(UUID stockId, String stockName, String stockSymbol, String sector, BigInteger companyValuation, BigInteger marketCap) {
+        this.stockId = stockId;
+        this.stockName = stockName;
+        this.sector = sector;
+        this.stockSymbol = stockSymbol;
+        this.companyValuation = companyValuation;
+        this.marketCap = marketCap;
+        updateDerivedFields();
+    }
+
     @PostLoad
     @PostPersist
     @PostUpdate

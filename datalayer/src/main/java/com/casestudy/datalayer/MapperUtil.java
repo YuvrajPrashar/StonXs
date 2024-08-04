@@ -85,4 +85,11 @@ public class MapperUtil {
         return transactionsList.stream().map(this::mapTransactionsToTransactionsDTO).toList();
     }
 
+    public Stock mapNewStockDtoToStock(NewStockDTO newStockDTO){
+        return new Stock( newStockDTO.getStockId() , newStockDTO.getStockName(),newStockDTO.getStockSymbol(),newStockDTO.getSector(),newStockDTO.getCompanyValuation(),newStockDTO.getMarketCap());
+    }
+    public NewStockDTO mapStockToNewStockDto(Stock stock){
+        return new NewStockDTO( stock.getStockId() ,stock.getStockName(),stock.getStockSymbol(),stock.getSector(),stock.getCompanyValuation(),stock.getMarketCap());
+    }
+
 }

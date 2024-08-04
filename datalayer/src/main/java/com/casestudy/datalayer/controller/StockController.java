@@ -1,5 +1,6 @@
 package com.casestudy.datalayer.controller;
 
+import com.casestudy.datalayer.dto.NewStockDTO;
 import com.casestudy.datalayer.dto.StockDTO;
 import com.casestudy.datalayer.service.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,11 +73,27 @@ public class StockController {
         }
     }
 
+    //get all stocks
+    @GetMapping("/api-v1/all-stocks")
+    public ResponseEntity<List<StockDTO>> getAllStocks(){
+        try {
+            List<StockDTO> res = stockService.getAllStocks();
+            if (res.isEmpty()) {
+                return ResponseEntity.status(404).build();
+            }
+            return ResponseEntity.ok(res);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).build();
+        }
+    }
+
     //update stock
     @PatchMapping("/auth/api-v1/stock/{id}")
-    public ResponseEntity<String> updateStock(@PathVariable("id") UUID id, @RequestBody StockDTO stockDto){
+    public ResponseEntity<String> updateStock(@PathVariable("id") UUID id
+            , @RequestBody StockDTO stockDto,@RequestParam(name="userid") UUID userid
+    ){
         try {
-            String res = stockService.updateStock(id,stockDto);
+            String res = stockService.updateStock(id,stockDto,userid);
             if (res.contains("exists")) {
                 return ResponseEntity.status(HttpStatus.CONFLICT).build();
             } else if (res.contains("Error")) {
@@ -92,9 +109,9 @@ public class StockController {
 
     //delete stock
     @DeleteMapping("/auth/api-v1/stock/{id}")
-    public ResponseEntity<String> deleteStock(@PathVariable("id") UUID id){
+    public ResponseEntity<String> deleteStock(@PathVariable("id") UUID id, @RequestParam(name="userid") UUID userid){
         try {
-            String res = stockService.deleteStock(id);
+            String res = stockService.deleteStock(id,userid);
 
             if (res.contains("not found")) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -109,9 +126,9 @@ public class StockController {
 
     //create stock
     @PostMapping("/auth/api-v1/stock")
-    public ResponseEntity<String> createStock(@RequestBody StockDTO stockDto){
+    public ResponseEntity<String> createStock(@RequestBody NewStockDTO stockDto, @RequestParam(name="userid") UUID userid){
         try {
-            String res = stockService.createStock(stockDto);
+            String res = stockService.createStock(stockDto,userid);
             if (res.contains("exists")) {
                 return ResponseEntity.status(HttpStatus.CONFLICT).build();
             } else if (res.contains("Error")) {
@@ -124,17 +141,4 @@ public class StockController {
         }
     }
 
-    //get all stocks
-    @GetMapping("/api-v1/all-stocks")
-    public ResponseEntity<List<StockDTO>> getAllStocks(){
-        try {
-            List<StockDTO> res = stockService.getAllStocks();
-            if (res.isEmpty()) {
-                return ResponseEntity.status(404).build();
-            }
-            return ResponseEntity.ok(res);
-        } catch (Exception e) {
-            return ResponseEntity.status(500).build();
-        }
-    }
 }
