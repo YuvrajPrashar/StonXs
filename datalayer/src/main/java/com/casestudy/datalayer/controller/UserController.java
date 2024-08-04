@@ -50,7 +50,7 @@ public class UserController {
     }
 
     //get user by id
-    @GetMapping("/api-v1/user/{id}")
+    @GetMapping("/auth/api-v1/user/{id}")
     public ResponseEntity<UserDTO> getUser(@PathVariable("id") UUID id){
         try {
             UserDTO res = UserService.getUser(id);

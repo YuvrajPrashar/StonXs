@@ -35,12 +35,14 @@ public class TransactionService {
 
     //create new transaction
     @Transactional
-    public String getTransactionByUserIdAndStockId(UUID userid, UUID stockid, TransactionDTO transactionDTO) {
+    public String createTransactionByUserIdAndStockId(UUID userid, UUID stockid, TransactionDTO transactionDTO) {
 
         try {
             // Fetching the user and stock
             User user = userRepo.findById(userid).orElse(null);
             Stock stock = stockRepo.findById(stockid).orElse(null);
+
+
 
             if (user == null || stock == null) {
                 return null;
@@ -60,7 +62,7 @@ public class TransactionService {
             transaction.setQuantity(quantity);
             transaction.setPrice(price);
             transaction.setTransactionType(transactionType);
-            transaction.setStatus("Progress");
+            transaction.setStatus("In-Progress");
 
             // Executing the transaction
             if (transactionType.equals("buy")) {

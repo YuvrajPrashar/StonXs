@@ -19,10 +19,10 @@ public class TransactionController {
     @PostMapping("auth/api-v1/transaction/user/{userid}/stock/{stockid}")
     public ResponseEntity<String> createTransactionByUserIdAndStockId(@PathVariable("userid") UUID userid, @PathVariable("stockid") UUID stockid, @RequestBody TransactionDTO transactionDTO) {
         try {
-            String res = transactionService.getTransactionByUserIdAndStockId(userid, stockid, transactionDTO);
+            String res = transactionService.createTransactionByUserIdAndStockId(userid, stockid, transactionDTO);
             if (res == null) {
                 return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-            }if (res.equals("Insufficient balance") || res.equals("Insufficient quantity") || res.equals("Transaction failed") || res.equals("Invalid transaction type") || res.equals("Invalid transaction type")) {
+            }if (res.equals("Insufficient balance") || res.equals("Insufficient quantity") || res.equals("Transaction failed") || res.equals("Insufficient holdings") || res.equals("Invalid transaction type")) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
             }
             return ResponseEntity.ok(res);
