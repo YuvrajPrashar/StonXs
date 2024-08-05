@@ -152,21 +152,22 @@ public class StockService {
             if (!user.isAdmin()){
                 return "User is not an admin";
             }
-
-            Stock stock =mapperUtil.mapStockDtoToStock(stockDto);
-            Stock stock1 = stocksRepo.findById(id).orElse(null);
-            if(stock1 == null){
+            Stock stock = stocksRepo.findById(id).orElse(null);
+            if(stock == null){
                 return "Stock not found";
             }
+            System.out.println(stock.getStockName());
             //Checking if stock already exists or not by stock symbol and stock name
-            if(stocksRepo.existsByStockSymbol(stock.getStockSymbol()) || stocksRepo.existsByStockName(stock.getStockName())){
+            if(stocksRepo.existsByStockSymbol(stockDto.getStockSymbol()) || stocksRepo.existsByStockName(stockDto.getStockName())){
                 return "Stock already exists";
             }
-            stock1.setStockSymbol(stock.getStockSymbol());
-            stock1.setStockName(stock.getStockName());
-            stock1.setCurrentPrice(stock.getCurrentPrice());
-            stock1.setSector(stock.getSector());
-            stocksRepo.save(stock1);
+            if (stockDto.getStockSymbol() != null){
+            stock.setStockSymbol(stockDto.getStockSymbol());}
+            if (stockDto.getStockName() != null){
+            stock.setStockName(stockDto.getStockName());}
+            if (stockDto.getSector() != null){
+            stock.setSector(stockDto.getSector());}
+            stocksRepo.save(stock);
             return "Stock updated successfully";
         } catch (Exception e) {
             throw new RuntimeException(e);
