@@ -28,7 +28,8 @@ public class Watchlist {
             inverseJoinColumns = @JoinColumn(name = "stockId")
     )
     private List<Stock> stock;
-    private boolean isDeleted=false;
+    @Column(columnDefinition = "boolean default false")
+    private boolean isDeleted;
 
 
     public Watchlist(List<Stock> stocks) {

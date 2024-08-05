@@ -29,7 +29,8 @@ public class Transactions {
     private String transactionType;
     private Long quantity;
     private float price;
-    private boolean isDeleted=false;
+    @Column(columnDefinition = "boolean default false")
+    private boolean isDeleted;
     private String status;
 
     public Transactions(Long quantity, String transactionType, float price, String status, Stock stock) {

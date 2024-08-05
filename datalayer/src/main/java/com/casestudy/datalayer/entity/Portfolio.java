@@ -31,7 +31,8 @@ public class Portfolio {
     private List<Holdings> holdings;
     private int investedValue;
     private int balance;
-    private boolean isDeleted = false;
+    @Column(columnDefinition = "boolean default false")
+    private boolean isDeleted;
 
     public Portfolio(int investedvalue, int balance) {
         this.investedValue = investedvalue;

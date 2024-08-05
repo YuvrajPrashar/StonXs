@@ -28,7 +28,8 @@ public class Stock {
     @Column(unique = true)
     private String stockSymbol;
 
-    private boolean isDeleted = false;
+    @Column(columnDefinition = "boolean default false")
+    private boolean isDeleted;
 
     private BigInteger companyValuation;
 
