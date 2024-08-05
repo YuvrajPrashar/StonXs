@@ -8,5 +8,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface TransactionRepo extends JpaRepository<Transactions, UUID> {
-    List<Transactions> findAllByUser(User user);
+    List<Transactions> findAllByUserOrderByCreatedOnDesc(User user);
+    List<Transactions> findBystatus(String status);
 }

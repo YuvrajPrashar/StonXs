@@ -6,6 +6,7 @@ import com.casestudy.datalayer.entity.*;
 import com.casestudy.datalayer.repositary.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -43,7 +44,6 @@ public class TransactionService {
             Stock stock = stockRepo.findById(stockid).orElse(null);
 
 
-
             if (user == null || stock == null) {
                 return null;
             }
@@ -70,45 +70,16 @@ public class TransactionService {
                     transaction.setStatus("Cancelled");
                     transactionRepo.save(transaction);
                     return "Insufficient balance";
-                }
-
-                // Updating the holdings
-                List<Holdings> holdings = holdingsRepo.findByPortfolio(portfolio);
-                Holdings holdingToUpdate = null;
-
-                if (holdings != null) {
-                    for (Holdings holding : holdings) {
-                        if (holding.getStocks().getStockId().equals(stock.getStockId())) {
-                            holdingToUpdate = holding;
-                            break;
-                        }
-                    }
-                }
-
-                if (holdingToUpdate == null) {
-                    Holdings newHolding = new Holdings();
-                    newHolding.setPortfolio(portfolio);
-                    newHolding.setStocks(stock);
-                    newHolding.setQuantity((int) quantity);
-                    holdingsRepo.save(newHolding);
                 } else {
-                    holdingToUpdate.setQuantity(holdingToUpdate.getQuantity() + (int) quantity);
-                    holdingsRepo.save(holdingToUpdate);
+                    transaction.setStatus("In-Progress");
+                    transactionRepo.save(transaction);
                 }
-
-                portfolio.setBalance((int) (portfolio.getBalance() - quantity * price));
-                portfolio.setInvestedValue((int) (portfolio.getInvestedValue() + quantity * price));
-                portfolioRepo.save(portfolio);
-
-                transaction.setStatus("Completed");
-                transactionRepo.save(transaction);
-                stock.setMarketCap(stock.getMarketCap().subtract(new BigInteger(String.valueOf(quantity))));
-                stockRepo.save(stock);
-                return "Transaction successful";
+                return "Transaction in progress";
             } else if (transactionType.equals("sell")) {
                 List<Holdings> holdings = holdingsRepo.findByPortfolio(portfolio);
                 Holdings holdingToUpdate = null;
-                // Updating the holdings
+
+                // searching for the holdings
                 if (holdings != null) {
                     for (Holdings holding : holdings) {
                         if (holding.getStocks().getStockId().equals(stock.getStockId())) {
@@ -123,20 +94,11 @@ public class TransactionService {
                     transaction.setStatus("Cancelled");
                     transactionRepo.save(transaction);
                     return "Insufficient holdings";
+                } else {
+                    transaction.setStatus("In-Progress");
+                    transactionRepo.save(transaction);
                 }
-
-                holdingToUpdate.setQuantity(holdingToUpdate.getQuantity() - (int) quantity);
-                holdingsRepo.save(holdingToUpdate);
-
-                portfolio.setBalance((int) (portfolio.getBalance() + quantity * price));
-                portfolio.setInvestedValue((int) (portfolio.getInvestedValue() - quantity * price));
-                portfolioRepo.save(portfolio);
-
-                transaction.setStatus("Completed");
-                transactionRepo.save(transaction);
-                stock.setMarketCap(stock.getMarketCap().add(new BigInteger(String.valueOf(quantity))));
-                stockRepo.save(stock);
-                return "Transaction successful";
+                return "Transaction in progress";
             } else {
                 return "Invalid transaction type";
             }
@@ -154,10 +116,108 @@ public class TransactionService {
                 return null;
             }
 
-            return mapperUtil.mapTransactionsListToTransactionsDTOList(transactionRepo.findAllByUser(user));
+            return mapperUtil.mapTransactionsListToTransactionsDTOList(transactionRepo.findAllByUserOrderByCreatedOnDesc(user));
 
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
+
+    @Transactional
+    @Scheduled(fixedRate = 15000)
+    public void TransactionManager() {
+        try {
+            List<Transactions> transactions = transactionRepo.findBystatus("In-Progress");
+            for(Transactions transactions1 : transactions){
+
+                // Fetching the user, stock and portfolio
+
+                User user = transactions1.getUser();
+                Stock stock = transactions1.getStock();
+                Portfolio portfolio = user.getPortfolio();
+                long quantity = transactions1.getQuantity();
+                String transactionType = transactions1.getTransactionType();
+                float price = transactions1.getPrice();
+                Transactions transaction = transactions1;
+
+
+                if (transactionType.equals("buy")) {
+                    if (portfolio.getBalance() < quantity * price) {
+                        transaction.setStatus("Cancelled");
+                        transactionRepo.save(transaction);
+                    }
+
+                    // Updating the holdings
+                    List<Holdings> holdings = holdingsRepo.findByPortfolio(portfolio);
+                    Holdings holdingToUpdate = null;
+
+                    if (holdings != null) {
+                        for (Holdings holding : holdings) {
+                            if (holding.getStocks().getStockId().equals(stock.getStockId())) {
+                                holdingToUpdate = holding;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (holdingToUpdate == null) {
+                        Holdings newHolding = new Holdings();
+                        newHolding.setPortfolio(portfolio);
+                        newHolding.setStocks(stock);
+                        newHolding.setQuantity((int) quantity);
+                        holdingsRepo.save(newHolding);
+                    } else {
+                        holdingToUpdate.setQuantity(holdingToUpdate.getQuantity() + (int) quantity);
+                        holdingsRepo.save(holdingToUpdate);
+                    }
+
+                    portfolio.setBalance((int) (portfolio.getBalance() - quantity * price));
+                    portfolio.setInvestedValue((int) (portfolio.getInvestedValue() + quantity * price));
+                    portfolioRepo.save(portfolio);
+
+                    transaction.setStatus("Completed");
+                    transactionRepo.save(transaction);
+                    stock.setMarketCap(stock.getMarketCap().subtract(new BigInteger(String.valueOf(quantity))));
+                    stockRepo.save(stock);
+                } else if (transactionType.equals("sell")) {
+                    List<Holdings> holdings = holdingsRepo.findByPortfolio(portfolio);
+                    Holdings holdingToUpdate = null;
+                    // Searching in  the holdings
+                    if (holdings != null) {
+                        for (Holdings holding : holdings) {
+                            if (holding.getStocks().getStockId().equals(stock.getStockId())) {
+                                holdingToUpdate = holding;
+                                break;
+                            }
+                        }
+                    }
+
+                    // Checking if the user has enough holdings
+                    if (holdingToUpdate == null || holdingToUpdate.getQuantity() < quantity) {
+                        transaction.setStatus("Cancelled");
+                        transactionRepo.save(transaction);
+                    }
+
+                    holdingToUpdate.setQuantity(holdingToUpdate.getQuantity() - (int) quantity);
+                    holdingsRepo.save(holdingToUpdate);
+
+                    portfolio.setBalance((int) (portfolio.getBalance() + quantity * price));
+                    portfolio.setInvestedValue((int) (portfolio.getInvestedValue() - quantity * price));
+                    portfolioRepo.save(portfolio);
+
+                    transaction.setStatus("Completed");
+                    transactionRepo.save(transaction);
+                    stock.setMarketCap(stock.getMarketCap().add(new BigInteger(String.valueOf(quantity))));
+                    stockRepo.save(stock);
+
+                } else {
+                    transaction.setStatus("Cancelled");
+                    transactionRepo.save(transaction);
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

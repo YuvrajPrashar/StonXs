@@ -107,7 +107,7 @@ public class StockController {
             } else if (res.contains("not found")) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
-                return ResponseEntity.status(HttpStatus.OK).build();
+                return ResponseEntity.status(HttpStatus.OK).body(res);
         } catch (Exception e) {
             return ResponseEntity.status(500).build();
         }
