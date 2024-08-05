@@ -5,7 +5,9 @@ const Orders = () => {
   const [orders, setOrders] = useState(null);
   const token = localStorage.getItem("token");
   const config = { headers: { Authorization: `${token}` } };
-  console.log(config);
+  if (!token) {
+    window.location.href = "/login";
+  }
   useEffect(() => {
     const userId = localStorage.getItem("userId");
     axios

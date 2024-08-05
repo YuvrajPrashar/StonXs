@@ -5,6 +5,9 @@ const WatchList = () => {
   const [stocksData, setStocks] = useState([]);
   const token = localStorage.getItem("token");
   const watchlistId = localStorage.getItem("watchlistId");
+  if (!watchlistId || !token) {
+    window.location.href = "/login";
+  }
   const config = {
     headers: { Authorization: `${token}` },
   };

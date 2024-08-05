@@ -7,6 +7,9 @@ const Portfolio = () => {
   const [data, setData] = useState(null);
   const portfolioId = localStorage.getItem("portfolioId");
   const token = localStorage.getItem("token");
+  if (!portfolioId || !token) {
+    window.location.href = "/login";
+  }
   const config = {
     headers: { Authorization: `${token}` },
   };
