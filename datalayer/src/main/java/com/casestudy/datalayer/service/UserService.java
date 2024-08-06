@@ -10,13 +10,16 @@ import com.casestudy.datalayer.repositary.WatchListRepo;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Valid;
+import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.casestudy.datalayer.dto.UserDTO;
-import java.util.List;
-import java.util.UUID;
+
+import java.util.*;
 
 
 import java.util.List;
@@ -25,7 +28,8 @@ import java.util.UUID;
 @Service
 public class UserService {
 
-
+    @Autowired
+    private Validator validator;
     @Autowired
     UserRepo userRepo;
     @Autowired
@@ -42,7 +46,7 @@ public class UserService {
 
     //save user
     @Transactional
-    public String createUser(UserDTO userDTO) {
+    public String createUser( UserDTO userDTO) {
         // Check if username or email already exist
         if (userRepo.existsByUsername(userDTO.getUsername())) {
             return "Username '" + userDTO.getUsername() + "' is already registered";
@@ -50,9 +54,13 @@ public class UserService {
         if (userRepo.existsByEmail(userDTO.getEmail())) {
             return "Email '" + userDTO.getEmail() + "' is already registered";
         }
-
         User user = mapperUtil.mapUserDtoToUser(userDTO);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        // Add a validation step
+        Set<ConstraintViolation<User>> violations = validator.validate(user);
+        if (!violations.isEmpty()) {
+            return  violations.iterator().next().getMessage();
+        }
         try {
             // Saving the user first
             userRepo.save(user);

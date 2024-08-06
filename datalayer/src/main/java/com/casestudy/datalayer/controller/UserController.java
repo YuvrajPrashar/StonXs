@@ -3,6 +3,7 @@ import com.casestudy.datalayer.dto.UserDTO;
 import com.casestudy.datalayer.entity.User;
 import com.casestudy.datalayer.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class UserController {
 
     //create new user
     @PostMapping("/api-v1/signup")
-    public ResponseEntity<String> addingNewUser(@RequestBody UserDTO userDTO){
+    public ResponseEntity<String> addingNewUser(@Valid @RequestBody UserDTO userDTO){
         try {
             String res= UserService.createUser(userDTO);
             if(res.contains("is already registered")){
