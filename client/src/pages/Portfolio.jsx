@@ -5,6 +5,7 @@ import axios from "axios";
 
 const Portfolio = () => {
   const [data, setData] = useState(null);
+  //Getting the portfolioId and token from the local storage
   const portfolioId = localStorage.getItem("portfolioId");
   const token = localStorage.getItem("token");
   if (!portfolioId || !token) {
@@ -13,7 +14,8 @@ const Portfolio = () => {
   const config = {
     headers: { Authorization: `${token}` },
   };
-
+  
+  //Fetching the portfolio data
   useEffect(() => {
     axios
       .get(

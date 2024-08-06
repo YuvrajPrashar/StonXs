@@ -5,7 +5,7 @@ const Footer = () => {
 
   const handleSubscribe = (e) => {
     e.preventDefault();
-    console.log("Subscribed with email:", email);
+    alert("Subscribed with email:", email);
   };
 
   return (

@@ -10,6 +10,7 @@ const Navbar = () => {
   const location = useLocation();
   const [selectedValue, setSelectedValue] = useState("");
 
+  //Checking if the user is logged in
   useEffect(() => {
     const loggedInChecker = () => {
       if (localStorage.getItem("userId")) {
@@ -21,6 +22,7 @@ const Navbar = () => {
     loggedInChecker();
   }, []);
 
+  //Setting the selected value based on the path
   useEffect(() => {
     const path = location.pathname.split("/")[1];
     if (path === "portfolio") {

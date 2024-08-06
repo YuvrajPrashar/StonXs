@@ -1,6 +1,9 @@
 import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
 
 const Pagination = ({ totalPages, setCurrentPage, currentPage }) => {
+  
+  //Functions to handle the button clicks
+  
   const handlePrevious = () => {
     if (currentPage >= 1) {
       setCurrentPage(currentPage - 1);

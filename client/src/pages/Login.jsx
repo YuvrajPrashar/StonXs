@@ -12,7 +12,7 @@ const Login = () => {
   });
 
   const navigate = useNavigate();
-
+  //Function to handle the sign in
   const signInHandler = () => {
     axios
       .post("http://localhost:8080/stonks/api-v1/login", data, {
@@ -20,9 +20,8 @@ const Login = () => {
       })
       .then((res) => {
         setModalMessage(res.data);
+        //Setting the token, userId, watchlistId and portfolioId in the local storage on successful login
         localStorage.setItem("token", res.headers["authorization"]);
-        console.log(res.headers["authorization"]);
-        console.log(res);
         localStorage.setItem("userId", res.headers["userid"]);
         localStorage.setItem("watchlistId", res.headers["watchlistid"]);
         localStorage.setItem("portfolioId", res.headers["portfolioid"]);
@@ -33,17 +32,17 @@ const Login = () => {
         }, 1700);
       })
       .catch((error) => {
-        console.log("Login Error:", error.response.data);
         setModalMessage(error.response.data);
         setShowModal(true);
       });
   };
 
+  //Function to handle the input change
   const inputHandler = (e) => {
     const { name, value } = e.target;
     setData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [name]: value.trim(),
     }));
   };
 

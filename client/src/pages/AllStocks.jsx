@@ -16,8 +16,9 @@ const AllStocks = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [pageSize, setPageSize] = useState(15);
   const [totalPages, setTotalPages] = useState(0);
-  const [selectedSector, setSelectedSector] = useState(""); // New state for selected sector
+  const [selectedSector, setSelectedSector] = useState(""); 
 
+  //Creating the sectors array
   const sectors = [
     "Communication Services",
     "Consumer Discretionary",
@@ -30,7 +31,7 @@ const AllStocks = () => {
     "Materials",
     "Utilities",
   ];
-
+  //Fetching the stocks data
   useEffect(() => {
     const fetchStocks = async () => {
       try {
@@ -64,6 +65,7 @@ const AllStocks = () => {
     fetchStocks();
   }, [category, currentPage, pageSize, selectedSector]);
 
+  //Sorting the stocks
   useEffect(() => {
     let sortedData = [...stocksDATA];
     switch (sortOption) {
@@ -82,6 +84,7 @@ const AllStocks = () => {
     setSortedStocks(sortedData);
   }, [sortOption, stocksDATA]);
 
+  //Function to handle the layout
   const layoutHandler = () => {
     setGrid(!grid);
   };

@@ -11,6 +11,7 @@ import Navbar from "./Components/Navbar.jsx";
 import SignUp from "./pages/SignUp.jsx";
 import SearchResults from "./pages/SearchResults.jsx";
 
+//Creating the routes array
 const routes = [
   { path: "/", element: <Home /> },
   { path: "/stocks", element: <AllStocks /> },

@@ -6,8 +6,9 @@ import Stockstable from "../Components/Stockstable";
 const SearchResults = () => {
   const [results, setResults] = useState([]);
   const [searchParams] = useSearchParams();
+  //Getting the search query from the URL
   const searchQuery = searchParams.get("query");
-
+  //Fetching the search results
   useEffect(() => {
     axios
       .get(`http://localhost:8080/stonks/api-v1/search?search=${searchQuery}`)

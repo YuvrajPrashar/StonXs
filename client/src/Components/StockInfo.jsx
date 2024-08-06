@@ -7,6 +7,7 @@ const StockInfo = (props) => {
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
 
+  //Fetching the watchlistId and token from the local storage
   const watchlistId = localStorage.getItem("watchlistId");
   const token = localStorage.getItem("token");
   const config = { headers: { Authorization: `${token}` } };

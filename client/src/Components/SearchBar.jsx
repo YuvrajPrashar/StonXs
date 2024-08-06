@@ -6,6 +6,7 @@ const SearchBar = () => {
   const searchRef = useRef();
   const navigate = useNavigate();
 
+  //Function to handle search
   const handleSearch = () => {
     const searchQuery = searchRef.current.value.trim();
     if (searchQuery) {

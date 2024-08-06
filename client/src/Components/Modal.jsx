@@ -6,7 +6,7 @@ const Modal = ({ message, onClose, timeout = 2000 }) => {
     const timer = setTimeout(onClose, timeout);
     return () => clearTimeout(timer);
   }, [onClose, timeout]);
-
+  //Creating a modal component which will be used to display messages overlayed on the screen with a portal
   return ReactDOM.createPortal(
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
       <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full text-center">

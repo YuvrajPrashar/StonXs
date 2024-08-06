@@ -7,11 +7,12 @@ import axios from "axios";
 const Transaction = () => {
   const { stockid } = useParams();
   const [StockData, setStockData] = useState(null);
-
+  //Fetching the stock data
   useEffect(() => {
     axios
       .get(`http://localhost:8080/stonks/api-v1/stock/${stockid}`)
       .then((res) => {
+        // console.log(res.data);
         setStockData(res.data);
       })
       .catch((err) => {

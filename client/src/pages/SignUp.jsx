@@ -12,9 +12,10 @@ const SignUp = () => {
     email: "",
     password: "",
   });
-
+  
+  //Function to handle the sign up
   const signUpHandler = () => {
-    console.log(data);
+    //Trimming the data so that there are no leading or trailing whitespaces
     data.username = data.username.trim();
     data.email = data.email.trim();
     data.password = data.password.trim();

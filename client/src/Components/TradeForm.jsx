@@ -9,9 +9,11 @@ const TradeForm = ({ stockData }) => {
   const quantityRef = useRef();
   const priceRef = useRef();
 
+  //Fetching the userId and stockId from the local storage
   const userId = localStorage.getItem("userId");
   const stockId = stockData?.stockid;
 
+  //Function to handle the trade
   const tradeHandler = () => {
     const data = {
       quantity: quantityRef.current.value,

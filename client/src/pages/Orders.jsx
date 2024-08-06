@@ -8,6 +8,7 @@ const Orders = () => {
   if (!token) {
     window.location.href = "/login";
   }
+  //Fetching the orders data
   useEffect(() => {
     const userId = localStorage.getItem("userId");
     axios
@@ -16,7 +17,6 @@ const Orders = () => {
         config
       )
       .then((res) => {
-        console.log(res.data);
         setOrders(res.data);
       });
   }, []);

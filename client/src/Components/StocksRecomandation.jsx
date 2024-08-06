@@ -9,6 +9,7 @@ const StocksRecomandation = () => {
   const [stocksDATA, setStocksDATA] = useState([]);
   const navigate = useNavigate();
 
+  //Fetching the stocks data
   useEffect(() => {
     axios
       .get("http://localhost:8080/stonks/api-v1/stocks?pageNo=2&pageSize=7")
