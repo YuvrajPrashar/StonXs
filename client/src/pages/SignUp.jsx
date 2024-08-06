@@ -12,7 +12,7 @@ const SignUp = () => {
     email: "",
     password: "",
   });
-  
+
   //Function to handle the sign up
   const signUpHandler = () => {
     //Trimming the data so that there are no leading or trailing whitespaces
@@ -62,6 +62,7 @@ const SignUp = () => {
                 onChange={inputHandler}
                 value={data.fullname}
                 className="w-full p-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+              required  
               />
             </div>
             <div>
@@ -73,6 +74,7 @@ const SignUp = () => {
                 onChange={inputHandler}
                 value={data.email}
                 className="w-full p-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+              required
               />
             </div>
             <div>
@@ -84,6 +86,7 @@ const SignUp = () => {
                 onChange={inputHandler}
                 value={data.username}
                 className="w-full p-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                required
               />
             </div>
             <div>
@@ -95,6 +98,7 @@ const SignUp = () => {
                 onChange={inputHandler}
                 value={data.password}
                 className="w-full p-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                required
               />
             </div>
             <button

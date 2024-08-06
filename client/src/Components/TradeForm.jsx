@@ -108,12 +108,14 @@ const TradeForm = ({ stockData }) => {
             placeholder={`${activeButton === "buy" ? "Buy" : "Sell"} Quantity`}
             className="border-b-2 font-semibold focus:outline-none placeholder:font-semibold"
             ref={quantityRef}
+            required
           />
           <input
             type="number"
             placeholder={`${activeButton === "buy" ? "Buy" : "Sell"} Price`}
             className="border-b-2 font-semibold focus:outline-none placeholder:font-semibold"
             ref={priceRef}
+            required
           />
         </div>
         <button

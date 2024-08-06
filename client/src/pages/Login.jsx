@@ -73,6 +73,7 @@ const Login = () => {
                 onChange={inputHandler}
                 value={data.username}
                 className="w-full p-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                required
               />
             </div>
             <div>
@@ -90,6 +91,7 @@ const Login = () => {
                 onChange={inputHandler}
                 value={data.password}
                 className="w-full p-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+              required
               />
             </div>
             <button
