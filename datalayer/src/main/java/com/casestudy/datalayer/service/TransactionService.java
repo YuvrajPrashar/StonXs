@@ -124,7 +124,7 @@ public class TransactionService {
     }
 
     @Transactional
-    @Scheduled(fixedRate = 15000)
+    @Scheduled(fixedRate = 5000)
     public void TransactionManager() {
         try {
             List<Transactions> transactions = transactionRepo.findBystatus("In-Progress");
